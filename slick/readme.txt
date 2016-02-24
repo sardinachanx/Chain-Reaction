@@ -1,9 +1,9 @@
-Slick - A 2D LWJGL Java Utility Library (out of date)
+Slick - A 2D LWJGL Java Utility Library
 -----------------------------------------------------------
 
-This is a very early version. The tests work but no demo has been written yet. Yes the windows natives
+This is a very early version. The tests work but no demo has been written yet. All the natives
 are included in the main distribution in the right place. This is just meant to make it easier for quick
-start windows users. All the natives required can be found in jars in the 'lib' directory.
+start users. All the natives required can be found in jars in the 'lib' directory.
 
 
 Tools

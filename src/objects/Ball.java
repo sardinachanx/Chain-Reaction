@@ -88,10 +88,10 @@ public abstract class Ball{
 		}
 	}
 
-	public boolean contactWith(Ball b){
-		double distanceX = Math.abs(x - b.getX());
-		double distanceY = Math.abs(y - b.getY());
-		double condition = radius + b.getRadius();
+	public boolean contactWith(Ball ball){
+		double distanceX = Math.abs(x - ball.getX());
+		double distanceY = Math.abs(y - ball.getY());
+		double condition = radius + ball.getRadius();
 		if(distanceX * distanceX + distanceY * distanceY <= condition * condition){
 			return true;
 		}
