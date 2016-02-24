@@ -9,6 +9,7 @@ public class GameBall extends Ball{
 
 	private static final float SPEED_FACTOR = 1.5f;
 	private static final float SPEED_INCREASE = 0.5f;
+	private static final float EXPAND_TRANSPARENCY = 0.65f;
 
 	protected float speedX;
 	protected float speedY;
@@ -41,15 +42,11 @@ public class GameBall extends Ball{
 		this.speedY = speedY;
 	}
 
-	public Color getColor(){
-		return color;
-	}
-
 	@Override
 	public void expand(int expandSpeed, int expandRadius){
 		if(!colorChanged){
 			colorChanged = true;
-			color = new Color(color.r, color.g, color.b, 0.65f);
+			color = new Color(color.r, color.g, color.b, EXPAND_TRANSPARENCY);
 		}
 		super.expand(expandSpeed, expandRadius);
 

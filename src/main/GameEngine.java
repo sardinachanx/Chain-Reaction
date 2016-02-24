@@ -9,6 +9,7 @@ public class GameEngine{
 		AppGameContainer app = new AppGameContainer(new GameFrame());
 		app.setTargetFrameRate(60);
 		app.setDisplayMode(1280, 800, false);
+		app.setShowFPS(false);
 		app.start();
 	}
 }
