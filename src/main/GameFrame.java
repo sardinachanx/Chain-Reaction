@@ -68,18 +68,18 @@ public class GameFrame extends BasicGame{
 						others.setExpanding(true);
 					}
 				}
-			}
-			if(ball.isExpanding() && !ball.isExpanded()){
-				ball.expand(EXPAND_SPEED, EXPANDED_BALL_RADIUS);
-			}
-			if(ball.isExpanded()){
-				ball.setTimer(ball.getTimer() + delta);
-			}
-			if(ball.getTimer() >= MAX_TIMER){
-				ball.shrink(SHRINK_SPEED);
-			}
-			if(ball.getRadius() <= 0 && ball.isExpanded()){
-				removed.add(ball);
+				if(ball.isExpanding() && !ball.isExpanded()){
+					ball.expand(EXPAND_SPEED, EXPANDED_BALL_RADIUS);
+				}
+				else{
+					ball.setTimer(ball.getTimer() + delta);
+					if(ball.getTimer() >= MAX_TIMER){
+						ball.shrink(SHRINK_SPEED);
+					}
+					if(ball.getRadius() <= 0){
+						removed.add(ball);
+					}
+				}
 			}
 		}
 		if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
