@@ -12,6 +12,7 @@ public abstract class Ball{
 	protected boolean expanded;
 	protected long timer;
 	protected Color color;
+	protected int order;
 
 	public Ball(int initialRadius){
 		radius = initialRadius;
@@ -45,6 +46,10 @@ public abstract class Ball{
 
 	public Color getColor(){
 		return color;
+	}
+
+	public int getOrder(){
+		return order;
 	}
 
 	public void setX(float x){
@@ -96,6 +101,10 @@ public abstract class Ball{
 			return true;
 		}
 		return false;
+	}
+
+	public void setOrder(int order){
+		this.order = order;
 	}
 
 	public abstract void move(GameContainer gc);

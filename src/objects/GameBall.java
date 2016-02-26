@@ -7,8 +7,8 @@ import org.newdawn.slick.GameContainer;
 
 public class GameBall extends Ball{
 
-	private static final float SPEED_FACTOR = 1.5f;
-	private static final float SPEED_INCREASE = 0.5f;
+	private static final float SPEED_CONSTANT = 1.5f;
+	private static final float SPEED_MIN = 0.5f;
 	private static final float EXPAND_TRANSPARENCY = 0.65f;
 
 	protected float speedX;
@@ -20,8 +20,8 @@ public class GameBall extends Ball{
 		Random rand = new Random();
 		x = rand.nextInt(gc.getWidth() - radius * 2) + radius;
 		y = rand.nextInt(gc.getHeight() - radius * 2) + radius;
-		speedX = SPEED_FACTOR * rand.nextFloat() + SPEED_INCREASE;
-		speedY = SPEED_FACTOR * rand.nextFloat() + SPEED_INCREASE;
+		speedX = generateSpeed();
+		speedY = generateSpeed();
 		color = new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)).brighter();
 		colorChanged = false;
 	}
@@ -40,6 +40,14 @@ public class GameBall extends Ball{
 
 	public void setSpeedY(float speedY){
 		this.speedY = speedY;
+	}
+
+	private static float generateSpeed(){
+		float speed = (float) (Math.random() * SPEED_CONSTANT + SPEED_MIN);
+		if(Math.random() < 0.5){
+			speed = -speed;
+		}
+		return speed;
 	}
 
 	@Override

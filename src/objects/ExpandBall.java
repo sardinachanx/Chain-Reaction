@@ -6,14 +6,33 @@ import org.newdawn.slick.Input;
 
 public class ExpandBall extends Ball{
 
+	protected boolean done;
+
 	public ExpandBall(int initialRadius){
 		super(initialRadius);
 		color = new Color(255, 255, 255, 96);
+		done = false;
 	}
 
 	public void startExpanding(){
 		radius = 0;
 		expanding = true;
+	}
+
+	public boolean isDone(){
+		return done;
+	}
+
+	public void setDone(boolean done){
+		this.done = done;
+	}
+
+	@Override
+	public void shrink(int shrinkSpeed){
+		super.shrink(shrinkSpeed);
+		if(radius <= 0){
+			done = true;
+		}
 	}
 
 	@Override
