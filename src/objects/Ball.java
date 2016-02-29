@@ -10,6 +10,7 @@ public abstract class Ball{
 	protected int radius;
 	protected boolean expanding;
 	protected boolean expanded;
+	protected boolean shrinking;
 	protected long timer;
 	protected Color color;
 	protected int order;
@@ -18,6 +19,7 @@ public abstract class Ball{
 		radius = initialRadius;
 		expanding = false;
 		expanded = false;
+		shrinking = false;
 	}
 
 	public float getX(){
@@ -52,6 +54,14 @@ public abstract class Ball{
 		return order;
 	}
 
+	public boolean isShrinking(){
+		return shrinking;
+	}
+
+	public int getScore(){
+		return order * order * order;
+	}
+
 	public void setX(float x){
 		this.x = x;
 	}
@@ -74,6 +84,10 @@ public abstract class Ball{
 
 	public void setTimer(long timer){
 		this.timer = timer;
+	}
+
+	public void setShrinking(boolean shrinking){
+		this.shrinking = shrinking;
 	}
 
 	public void expand(int expandSpeed, int expandRadius){

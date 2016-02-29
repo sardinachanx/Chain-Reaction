@@ -11,6 +11,7 @@ public class ExpandBall extends Ball{
 	public ExpandBall(int initialRadius){
 		super(initialRadius);
 		color = new Color(255, 255, 255, 96);
+		order = 0;
 		done = false;
 	}
 
