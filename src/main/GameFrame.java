@@ -27,6 +27,7 @@ public class GameFrame extends BasicGame{
 
 	private static final int SCORE_X = 10;
 	private static final int SCORE_Y = 10;
+	private static final int BALL_Y = 30;
 	private static final int SCORE_FACTOR = 100;
 
 	protected Set<Ball> balls;
@@ -62,29 +63,25 @@ public class GameFrame extends BasicGame{
 		}
 		g.setColor(Color.white);
 		g.drawString("Score: " + score, SCORE_X, SCORE_Y);
+		g.drawString(ballsExpanded + " out of " + BALL_NUM + " expanded", SCORE_X, BALL_Y);
 	}
 
 	@Override
 	public void init(GameContainer gc) throws SlickException{
 		balls = new HashSet<Ball>();
-		for(int i = 0; i < BALL_NUM; i++){
-			GameBall ball = new GameBall(gc, INITIAL_BALL_RADIUS);
-			balls.add(ball);
-		}
-		expandBall = new ExpandBall(INITIAL_EXPANDBALL_RADIUS);
-		balls.add(expandBall);
 		removed = new HashSet<Ball>();
-		finished = false;
-		score = 0;
-		ballsExpanded = 0;
+		restart(gc);
 	}
 
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException{
+		Input input = gc.getInput();
 		if(finished){
+			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+				restart(gc);
+			}
 			return;
 		}
-		Input input = gc.getInput();
 		boolean frameCheck = false;
 		for(Ball ball : balls){
 			if(!ball.isExpanded() && !ball.isExpanding()){
@@ -128,5 +125,19 @@ public class GameFrame extends BasicGame{
 		if(!frameCheck && expandBall.isDone()){
 			finished = true;
 		}
+	}
+
+	private void restart(GameContainer gc) throws SlickException{
+		balls.clear();
+		for(int i = 0; i < BALL_NUM; i++){
+			GameBall ball = new GameBall(gc, INITIAL_BALL_RADIUS);
+			balls.add(ball);
+		}
+		expandBall = new ExpandBall(INITIAL_EXPANDBALL_RADIUS);
+		balls.add(expandBall);
+		removed.clear();
+		finished = false;
+		score = 0;
+		ballsExpanded = 0;
 	}
 }
