@@ -1,6 +1,7 @@
 package main;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import org.newdawn.slick.BasicGame;
@@ -33,9 +34,11 @@ public class GameFrame extends BasicGame{
 	protected Set<Ball> balls;
 	protected Set<Ball> removed;
 	protected ExpandBall expandBall;
+	protected boolean started;
 	protected boolean finished;
 	protected long score;
 	protected int ballsExpanded;
+	protected Random random;
 
 	public GameFrame(){
 		super("ChainReaction");
@@ -50,15 +53,17 @@ public class GameFrame extends BasicGame{
 			g.setBackground(Color.darkGray);
 		}
 		g.clear();
-		for(Ball ball : balls){
-			g.setColor(ball.getColor());
-			g.fillOval(ball.getX() - ball.getRadius(), ball.getY() - ball.getRadius(), ball.getRadius() * 2,
-					ball.getRadius() * 2);
-			if(!ball.isShrinking() && (ball.isExpanded() || ball.isExpanding())){
-				g.setColor(Color.white);
-				String ballScore = "+" + ball.getScore() * SCORE_FACTOR;
-				g.drawString(ballScore, ball.getX() - g.getFont().getWidth(ballScore) / 2,
-						ball.getY() - g.getFont().getHeight(ballScore) / 2);
+		if(started){
+			for(Ball ball : balls){
+				g.setColor(ball.getColor());
+				g.fillOval(ball.getX() - ball.getRadius(), ball.getY() - ball.getRadius(), ball.getRadius() * 2,
+						ball.getRadius() * 2);
+				if(!ball.isShrinking() && (ball.isExpanded() || ball.isExpanding())){
+					g.setColor(Color.white);
+					String ballScore = "+" + ball.getScore() * SCORE_FACTOR;
+					g.drawString(ballScore, ball.getX() - g.getFont().getWidth(ballScore) / 2,
+							ball.getY() - g.getFont().getHeight(ballScore) / 2);
+				}
 			}
 		}
 		g.setColor(Color.white);
@@ -70,12 +75,19 @@ public class GameFrame extends BasicGame{
 	public void init(GameContainer gc) throws SlickException{
 		balls = new HashSet<Ball>();
 		removed = new HashSet<Ball>();
+		random = new Random();
+		started = false;
 		restart(gc);
 	}
 
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException{
 		Input input = gc.getInput();
+		if(!started){
+			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+				started = true;
+			}
+		}
 		if(finished){
 			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
 				restart(gc);
@@ -130,10 +142,11 @@ public class GameFrame extends BasicGame{
 	private void restart(GameContainer gc) throws SlickException{
 		balls.clear();
 		for(int i = 0; i < BALL_NUM; i++){
-			GameBall ball = new GameBall(gc, INITIAL_BALL_RADIUS);
+			GameBall ball = new GameBall(INITIAL_BALL_RADIUS,
+					new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)).brighter(), gc);
 			balls.add(ball);
 		}
-		expandBall = new ExpandBall(INITIAL_EXPANDBALL_RADIUS);
+		expandBall = new ExpandBall(INITIAL_EXPANDBALL_RADIUS, new Color(255, 255, 255, 96));
 		balls.add(expandBall);
 		removed.clear();
 		finished = false;

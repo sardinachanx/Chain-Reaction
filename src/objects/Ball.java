@@ -15,8 +15,9 @@ public abstract class Ball{
 	protected Color color;
 	protected int order;
 
-	public Ball(int initialRadius){
-		radius = initialRadius;
+	public Ball(int radius, Color color){
+		this.color = color;
+		this.radius = radius;
 		expanding = false;
 		expanded = false;
 		shrinking = false;

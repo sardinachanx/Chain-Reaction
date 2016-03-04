@@ -8,9 +8,8 @@ public class ExpandBall extends Ball{
 
 	protected boolean done;
 
-	public ExpandBall(int initialRadius){
-		super(initialRadius);
-		color = new Color(255, 255, 255, 96);
+	public ExpandBall(int initialRadius, Color color){
+		super(initialRadius, color);
 		order = 0;
 		done = false;
 	}

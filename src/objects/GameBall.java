@@ -15,8 +15,8 @@ public class GameBall extends Ball{
 	protected float speedY;
 	protected boolean colorChanged;
 
-	public GameBall(GameContainer gc, int initialRadius){
-		super(initialRadius);
+	public GameBall(int initialRadius, Color color, GameContainer gc){
+		super(initialRadius, color);
 		Random rand = new Random();
 		x = rand.nextInt(gc.getWidth() - radius * 2) + radius;
 		y = rand.nextInt(gc.getHeight() - radius * 2) + radius;
