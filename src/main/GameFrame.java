@@ -105,12 +105,21 @@ public class GameFrame extends BasicGame{
 		if(!started){
 			if(input.isKeyPressed(Input.KEY_A)){
 				gameMode = GameMode.ORIGINAL;
+				level = newLevelFromGameMode(gameMode);
+				ballsExpanded = level.getLevelThreshold();
+				restart(gc);
 			}
 			if(input.isKeyPressed(Input.KEY_S)){
-				gameMode = GameMode.INFINTE;
+				gameMode = GameMode.SURVIVAL;
+				level = newLevelFromGameMode(gameMode);
+				ballsExpanded = level.getLevelThreshold();
+				restart(gc);
 			}
 			if(input.isKeyPressed(Input.KEY_D)){
-				gameMode = GameMode.SURVIVAL;
+				gameMode = GameMode.INFINTE;
+				level = newLevelFromGameMode(gameMode);
+				ballsExpanded = level.getLevelThreshold();
+				restart(gc);
 			}
 			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
 				started = true;
@@ -180,7 +189,7 @@ public class GameFrame extends BasicGame{
 		}
 		else{
 			if(gameMode == GameMode.SURVIVAL){
-				level = newLevelFromGameMode(GameMode.SURVIVAL);
+				level = newLevelFromGameMode(GameMode.SURVIVAL).getNextLevel();
 			}
 		}
 		for(int i = 0; i < level.getBallNum(); i++){

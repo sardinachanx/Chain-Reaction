@@ -8,7 +8,7 @@ public class InfiniteLevel extends ProceduralLevel{
 
 	@Override
 	public double thresholdPercent(int level){
-		return -1 / (Math.pow(level, 1.5) / 8.0 + 1) + 1;
+		return -1 / (Math.pow(level, 1.5) / 16.0 + 1) + 1;
 	}
 
 	@Override

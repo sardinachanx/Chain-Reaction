@@ -17,7 +17,11 @@ public abstract class ProceduralLevel extends Level{
 
 	@Override
 	public int levelThreshold(int level){
-		return (int) (rawBallNum(level) * thresholdPercent(level));
+		int threshold = (int) (rawBallNum(level) * thresholdPercent(level));
+		if(threshold < 1){
+			return 1;
+		}
+		return threshold;
 	}
 
 	public abstract double thresholdPercent(int level);
