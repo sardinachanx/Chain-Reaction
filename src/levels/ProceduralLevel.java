@@ -1,4 +1,4 @@
-package level;
+package levels;
 
 public abstract class ProceduralLevel extends Level{
 

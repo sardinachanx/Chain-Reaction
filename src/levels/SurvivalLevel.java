@@ -1,4 +1,4 @@
-package level;
+package levels;
 
 public class SurvivalLevel extends ProceduralLevel{
 

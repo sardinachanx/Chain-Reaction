@@ -11,10 +11,10 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
-import level.InfiniteLevel;
-import level.Level;
-import level.OriginalLevel;
-import level.SurvivalLevel;
+import levels.InfiniteLevel;
+import levels.Level;
+import levels.OriginalLevel;
+import levels.SurvivalLevel;
 import objects.Ball;
 import objects.ExpandBall;
 import objects.GameBall;
