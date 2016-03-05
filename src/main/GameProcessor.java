@@ -19,7 +19,7 @@ import objects.Ball;
 import objects.ExpandBall;
 import objects.GameBall;
 
-public class GameFrame extends BasicGame{
+public class GameProcessor extends BasicGame{
 
 	public static final int INITIAL_BALL_RADIUS = 8;
 	public static final int INITIAL_EXPANDBALL_RADIUS = 50;
@@ -47,7 +47,7 @@ public class GameFrame extends BasicGame{
 	protected GameMode gameMode;
 	protected Level level;
 
-	public GameFrame(){
+	public GameProcessor(){
 		super("Chain Reaction");
 	}
 
