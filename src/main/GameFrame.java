@@ -23,13 +23,13 @@ public class GameFrame extends BasicGame{
 	public static final int MAX_TIMER = 3000;
 	public static final int EXPAND_SPEED = 3;
 	public static final int SHRINK_SPEED = 4;
-	public static final int BALL_NUM = 50;
-	public static final int LEVEL_THRESHOLD = 30;
 
 	private static final int SCORE_X = 10;
 	private static final int SCORE_Y = 10;
 	private static final int BALL_Y = 30;
+	private static final int MODE_Y = 50;
 	private static final int SCORE_FACTOR = 100;
+	private static final int[] ORIGINAL_THRESHOLD = {1, 2, 4, 6, 10, 15, 18, 22, 30, 39, 48, 55};
 
 	protected Set<Ball> balls;
 	protected Set<Ball> removed;
@@ -37,16 +37,22 @@ public class GameFrame extends BasicGame{
 	protected boolean started;
 	protected boolean finished;
 	protected long score;
+	protected long currentLevelScore;
 	protected int ballsExpanded;
 	protected Random random;
 
+	protected GameMode gameMode;
+	protected int ballNum;
+	protected int levelThreshold;
+	protected int level;
+
 	public GameFrame(){
-		super("ChainReaction");
+		super("Chain Reaction");
 	}
 
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException{
-		if(ballsExpanded >= LEVEL_THRESHOLD){
+		if(ballsExpanded >= levelThreshold){
 			g.setBackground(Color.darkGray.brighter());
 		}
 		else{
@@ -60,15 +66,18 @@ public class GameFrame extends BasicGame{
 						ball.getRadius() * 2);
 				if(!ball.isShrinking() && (ball.isExpanded() || ball.isExpanding())){
 					g.setColor(Color.white);
-					String ballScore = "+" + ball.getScore() * SCORE_FACTOR;
-					g.drawString(ballScore, ball.getX() - g.getFont().getWidth(ballScore) / 2,
-							ball.getY() - g.getFont().getHeight(ballScore) / 2);
+					if(ball.isGameBall()){
+						String ballScore = "+" + ball.getScore() * SCORE_FACTOR;
+						g.drawString(ballScore, ball.getX() - g.getFont().getWidth(ballScore) / 2,
+								ball.getY() - g.getFont().getHeight(ballScore) / 2);
+					}
 				}
 			}
 		}
 		g.setColor(Color.white);
-		g.drawString("Score: " + score, SCORE_X, SCORE_Y);
-		g.drawString(ballsExpanded + " out of " + BALL_NUM + " expanded", SCORE_X, BALL_Y);
+		g.drawString("Score: " + (currentLevelScore + score), SCORE_X, SCORE_Y);
+		g.drawString(ballsExpanded + " out of " + ballNum + " expanded", SCORE_X, BALL_Y);
+		g.drawString("Mode: " + gameMode.getName() + " Level " + level, SCORE_X, MODE_Y);
 	}
 
 	@Override
@@ -77,6 +86,9 @@ public class GameFrame extends BasicGame{
 		removed = new HashSet<Ball>();
 		random = new Random();
 		started = false;
+		level = 0;
+		score = 0;
+		gameMode = GameMode.ORIGINAL;
 		restart(gc);
 	}
 
@@ -84,14 +96,29 @@ public class GameFrame extends BasicGame{
 	public void update(GameContainer gc, int delta) throws SlickException{
 		Input input = gc.getInput();
 		if(!started){
+			if(input.isKeyPressed(Input.KEY_A)){
+				gameMode = GameMode.ORIGINAL;
+			}
+			if(input.isKeyPressed(Input.KEY_S)){
+				gameMode = GameMode.INFINTE;
+			}
+			if(input.isKeyPressed(Input.KEY_D)){
+				gameMode = GameMode.SURVIVAL;
+			}
 			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
 				started = true;
 			}
 		}
 		if(finished){
-			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) || input.isKeyPressed(Input.KEY_SPACE)){
 				restart(gc);
 			}
+			return;
+		}
+		if(input.isKeyPressed(Input.KEY_0)){
+			ballsExpanded = levelThreshold;
+			started = true;
+			finished = true;
 			return;
 		}
 		boolean frameCheck = false;
@@ -105,7 +132,7 @@ public class GameFrame extends BasicGame{
 					if(ball.contactWith(others) && !ball.equals(others)){
 						if(!others.isExpanded() & !others.isExpanding()){
 							others.setOrder(ball.getOrder() + 1);
-							score += others.getScore() * SCORE_FACTOR;
+							currentLevelScore += others.getScore() * SCORE_FACTOR;
 							ballsExpanded++;
 						}
 						others.setExpanding(true);
@@ -129,7 +156,6 @@ public class GameFrame extends BasicGame{
 			}
 		}
 		if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !expandBall.isExpanding() && !expandBall.isExpanded()){
-			score += expandBall.getScore() * SCORE_FACTOR;
 			expandBall.startExpanding();
 		}
 		balls.removeAll(removed);
@@ -139,9 +165,26 @@ public class GameFrame extends BasicGame{
 		}
 	}
 
+	public void setGameMode(GameMode gameMode){
+		this.gameMode = gameMode;
+	}
+
 	private void restart(GameContainer gc) throws SlickException{
 		balls.clear();
-		for(int i = 0; i < BALL_NUM; i++){
+		if(ballsExpanded >= levelThreshold){
+			increaseLevel();
+			if(level > 1){
+				score += currentLevelScore;
+			}
+		}
+		else{
+			if(gameMode == GameMode.SURVIVAL){
+				level = 0;
+				score = 0;
+				increaseLevel();
+			}
+		}
+		for(int i = 0; i < ballNum; i++){
 			GameBall ball = new GameBall(INITIAL_BALL_RADIUS,
 					new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)).brighter(), gc);
 			balls.add(ball);
@@ -150,7 +193,36 @@ public class GameFrame extends BasicGame{
 		balls.add(expandBall);
 		removed.clear();
 		finished = false;
-		score = 0;
+		currentLevelScore = 0;
 		ballsExpanded = 0;
 	}
+
+	private void increaseLevel(){
+		level++;
+		if(gameMode == GameMode.ORIGINAL){
+			ballNum = ((level - 1) % 12 + 1) * 5;
+			levelThreshold = ORIGINAL_THRESHOLD[(level - 1) % 12];
+		}
+		else if(gameMode == GameMode.SURVIVAL){
+			ballNum = (int) limit(level);
+			levelThreshold = (int) survivalThresholdLimit(level);
+		}
+		else if(gameMode == GameMode.INFINTE){
+			ballNum = (int) limit(level);
+			levelThreshold = (int) infiniteThresholdLimit(level);
+		}
+	}
+
+	private static double limit(int level){
+		return 4 * Math.pow(Math.log(level + 1), 2);
+	}
+
+	private static double survivalThresholdLimit(int level){
+		return limit(level) * (-1 / (Math.pow(level, 1.5) / 16.0 + 1) + 1);
+	}
+
+	private static double infiniteThresholdLimit(int level){
+		return limit(level) * (-1 / (Math.pow(level, 1.5) / 8.0 + 1) + 1);
+	}
+
 }
