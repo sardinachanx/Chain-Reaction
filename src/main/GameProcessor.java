@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -19,7 +18,7 @@ import objects.Ball;
 import objects.ExpandBall;
 import objects.GameBall;
 
-public class GameProcessor extends BasicGame{
+public class GameProcessor implements Processor{
 
 	public static final int INITIAL_BALL_RADIUS = 8;
 	public static final int INITIAL_EXPANDBALL_RADIUS = 50;
@@ -48,7 +47,7 @@ public class GameProcessor extends BasicGame{
 	protected Level level;
 
 	public GameProcessor(){
-		super("Chain Reaction");
+
 	}
 
 	@Override
