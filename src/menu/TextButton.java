@@ -23,22 +23,22 @@ public abstract class TextButton extends Button{
 		this(x, y, width, height, true);
 	}
 
-	public TextButton(int x, int y, int width, int height, boolean visible){
-		this(x, y, width, height, visible, "");
+	public TextButton(int x, int y, int width, int height, boolean enabled){
+		this(x, y, width, height, enabled, "");
 	}
 
-	public TextButton(int x, int y, int width, int height, boolean visible, String text){
-		this(x, y, width, height, visible, text, Color.white, Color.black);
+	public TextButton(int x, int y, int width, int height, boolean enabled, String text){
+		this(x, y, width, height, enabled, text, Color.white, Color.black);
 	}
 
-	public TextButton(int x, int y, int width, int height, boolean visible, String text, Color buttonColor,
+	public TextButton(int x, int y, int width, int height, boolean enabled, String text, Color buttonColor,
 			Color textColor){
-		this(x, y, width, height, visible, text, 0, buttonColor, textColor, Color.black);
+		this(x, y, width, height, enabled, text, 0, buttonColor, textColor, Color.black);
 	}
 
-	public TextButton(int x, int y, int width, int height, boolean visible, String text, int borderThickness,
+	public TextButton(int x, int y, int width, int height, boolean enabled, String text, int borderThickness,
 			Color buttonColor, Color textColor, Color borderColor){
-		super(x, y, width, height, visible);
+		super(x, y, width, height, enabled);
 		this.text = text;
 		this.borderThickness = borderThickness;
 		this.buttonColor = buttonColor;
@@ -89,11 +89,12 @@ public abstract class TextButton extends Button{
 	@Override
 	public void render(Graphics g){
 		g.setColor(borderColor);
-		g.drawRect(x, y, width + 2 * borderThickness, height + 2 * borderThickness);
+		g.fillRect(x - (width + 2 * borderThickness) / 2, y - (height + 2 * borderThickness) / 2,
+				width + 2 * borderThickness, height + 2 * borderThickness);
 		g.setColor(buttonColor);
-		g.drawRect(x, y, width, height);
+		g.fillRect(x - width / 2, y - height / 2, width, height);
 		g.setColor(textColor);
-		g.drawString(text, x - g.getFont().getWidth(text) / 2, g.getFont().getHeight(text) / 2);
+		g.drawString(text, x - g.getFont().getWidth(text) / 2, y - g.getFont().getHeight(text) / 2);
 	}
 
 }

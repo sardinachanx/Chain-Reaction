@@ -1,15 +1,18 @@
 package main;
 
+import java.awt.Font;
 import java.util.Set;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.TrueTypeFont;
 
 public class StartupScreenProcessor implements Processor{
 
 	CoreProcessor cp;
 	boolean startUp;
+	boolean initialized;
 
 	public StartupScreenProcessor(CoreProcessor cp){
 		this.cp = cp;
@@ -18,7 +21,8 @@ public class StartupScreenProcessor implements Processor{
 
 	@Override
 	public void init(GameContainer gc) throws SlickException{
-
+		cp.setFont(new TrueTypeFont(new Font("American Typewriter", Font.PLAIN, 18), true));
+		initialized = true;
 	}
 
 	@Override
@@ -48,7 +52,7 @@ public class StartupScreenProcessor implements Processor{
 
 	@Override
 	public boolean initialized(){
-		return true;
+		return initialized;
 	}
 
 	public boolean hasStartUp(){

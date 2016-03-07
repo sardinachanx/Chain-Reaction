@@ -29,8 +29,9 @@ public class GameProcessor implements Processor{
 
 	private static final int SCORE_X = 10;
 	private static final int SCORE_Y = 10;
-	private static final int BALL_Y = 30;
-	private static final int MODE_Y = 50;
+	private static final int OFFSET = 25;
+	private static final int BALL_Y = SCORE_Y + OFFSET;
+	private static final int MODE_Y = BALL_Y + OFFSET;
 	private static final int SCORE_FACTOR = 100;
 
 	protected Set<Ball> balls;
@@ -48,9 +49,11 @@ public class GameProcessor implements Processor{
 	protected boolean finished;
 	protected boolean paused;
 	protected boolean initialized;
+	protected boolean debug;
 
-	public GameProcessor(){
+	public GameProcessor(boolean debug){
 		initialized = false;
+		this.debug = debug;
 	}
 
 	@Override
@@ -103,29 +106,26 @@ public class GameProcessor implements Processor{
 			return;
 		}
 		Input input = gc.getInput();
-		if(input.isKeyPressed(Input.KEY_0)){
+		if(input.isKeyPressed(Input.KEY_0) && isDebug()){
 			ballsExpanded = level.getLevelThreshold();
 			started = true;
 			finished = true;
 			return;
 		}
 		if(!started){
-			if(input.isKeyPressed(Input.KEY_A)){
+			if(input.isKeyPressed(Input.KEY_A) && isDebug()){
 				gameMode = GameMode.ORIGINAL;
-				level = newLevelFromGameMode(gameMode);
-				ballsExpanded = level.getLevelThreshold();
+				resetLevel();
 				restart(gc);
 			}
-			if(input.isKeyPressed(Input.KEY_S)){
+			if(input.isKeyPressed(Input.KEY_S) && isDebug()){
 				gameMode = GameMode.SURVIVAL;
-				level = newLevelFromGameMode(gameMode);
-				ballsExpanded = level.getLevelThreshold();
+				resetLevel();
 				restart(gc);
 			}
-			if(input.isKeyPressed(Input.KEY_D)){
+			if(input.isKeyPressed(Input.KEY_D) && isDebug()){
 				gameMode = GameMode.INFINTE;
-				level = newLevelFromGameMode(gameMode);
-				ballsExpanded = level.getLevelThreshold();
+				resetLevel();
 				restart(gc);
 			}
 			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !crossesMenu(input)){
@@ -196,12 +196,15 @@ public class GameProcessor implements Processor{
 		this.paused = paused;
 	}
 
-	private void restart(GameContainer gc) throws SlickException{
+	public void restart(GameContainer gc) throws SlickException{
 		balls.clear();
 		if(ballsExpanded >= level.getLevelThreshold()){
 			level = level.getNextLevel();
 			if(level.getLevel() > 1){
 				score += currentLevelScore;
+			}
+			else{
+				score = 0;
 			}
 		}
 		else{
@@ -250,4 +253,25 @@ public class GameProcessor implements Processor{
 		return input.getMouseX() > GUIProcessor.GAMEMENU_X && input.getMouseY() < GUIProcessor.GAMEMENU_Y;
 	}
 
+	public boolean isDebug(){
+		return debug;
+	}
+
+	public void setDebug(boolean debug){
+		this.debug = debug;
+	}
+
+	public void resetLevel(){
+		ballsExpanded = level.getLevelThreshold();
+		level = newLevelFromGameMode(gameMode);
+		score = 0;
+	}
+
+	public void setStarted(boolean started){
+		this.started = started;
+	}
+
+	public boolean isStarted(){
+		return started;
+	}
 }

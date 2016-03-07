@@ -3,31 +3,40 @@ package main;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 public class CoreProcessor extends BasicGame{
 
-	GameProcessor gp;
-	GUIProcessor gup;
-	StartupScreenProcessor ssp;
-	Set<Processor> processors;
-	Set<Processor> running;
+	protected GameProcessor gp;
+	protected GUIProcessor gup;
+	protected StartupScreenProcessor ssp;
+	protected HelpProcessor hp;
+	protected Set<Processor> processors;
+	protected Set<Processor> running;
 
-	public CoreProcessor(){
+	protected boolean debug;
+	protected Font font;
+
+	public CoreProcessor(boolean debug){
 		super("Chain Reaction");
-		gp = new GameProcessor();
+		this.debug = debug;
+		gp = new GameProcessor(debug);
 		gup = new GUIProcessor(this);
 		ssp = new StartupScreenProcessor(this);
+		hp = new HelpProcessor();
 		processors = new HashSet<Processor>();
 		processors.add(gp);
 		processors.add(gup);
 		processors.add(ssp);
-		running = new TreeSet<Processor>(new Comparator<Processor>(){
+		processors.add(hp);
+		running = new ConcurrentSkipListSet<Processor>(new Comparator<Processor>(){
 
 			@Override
 			public int compare(Processor o1, Processor o2){
@@ -59,6 +68,22 @@ public class CoreProcessor extends BasicGame{
 		this.gup = gup;
 	}
 
+	public StartupScreenProcessor getSsp(){
+		return ssp;
+	}
+
+	public void setSsp(StartupScreenProcessor ssp){
+		this.ssp = ssp;
+	}
+
+	public HelpProcessor getHp(){
+		return hp;
+	}
+
+	public void setHp(HelpProcessor hp){
+		this.hp = hp;
+	}
+
 	public Set<Processor> getProcessors(){
 		return processors;
 	}
@@ -71,6 +96,9 @@ public class CoreProcessor extends BasicGame{
 	public void render(GameContainer gc, Graphics g) throws SlickException{
 		//TODO
 		//gp.render(gc, g);
+		if(font != null){
+			g.setFont(font);
+		}
 		for(Processor processor : running){
 			processor.render(gc, g);
 		}
@@ -87,13 +115,21 @@ public class CoreProcessor extends BasicGame{
 	public void update(GameContainer gc, int delta) throws SlickException{
 		// TODO Auto-generated method stub
 		//gp.update(gc, delta);
+		Input input = gc.getInput();
 		if(ssp.hasStartUp()){
 			running.remove(ssp);
-			running.add(gp);
 			running.add(gup);
 		}
 		for(Processor processor : running){
 			processor.update(gc, delta);
+		}
+		if(input.isKeyPressed(Input.KEY_GRAVE)){
+			if(gp.isDebug()){
+				gp.setDebug(false);
+			}
+			else{
+				gp.setDebug(true);
+			}
 		}
 	}
 
@@ -113,6 +149,43 @@ public class CoreProcessor extends BasicGame{
 		else{
 			running.remove(gp);
 		}
+	}
+
+	public void setHelpProcessorState(boolean on){
+		if(on){
+			running.add(hp);
+		}
+		else{
+			running.remove(hp);
+		}
+	}
+
+	public boolean gameProcessorOn(){
+		return running.contains(gp);
+	}
+
+	public boolean guiProcessorOn(){
+		return running.contains(gup);
+	}
+
+	public boolean helpProcessorOn(){
+		return running.contains(hp);
+	}
+
+	public void setDebug(boolean debug){
+		this.debug = debug;
+	}
+
+	public boolean isDebug(){
+		return debug;
+	}
+
+	public void setFont(Font font){
+		this.font = font;
+	}
+
+	public Font getFont(){
+		return font;
 	}
 
 }

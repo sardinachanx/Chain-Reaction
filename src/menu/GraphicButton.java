@@ -5,23 +5,17 @@ import org.newdawn.slick.Image;
 
 public abstract class GraphicButton extends Button{
 
-	private static final int DEFAULT_HEIGHT = 30;
-	private static final int DEFAULT_WIDTH = 30;
-
 	Image image;
 
 	public GraphicButton(int x, int y, Image image){
-		this(x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT, image);
+		this(x, y, true, image);
 	}
 
-	public GraphicButton(int x, int y, int width, int height, Image image){
-		this(x, y, width, height, true, image);
-	}
-
-	public GraphicButton(int x, int y, int width, int height, boolean visible, Image image){
-		super(x, y, width, height, visible);
+	public GraphicButton(int x, int y, boolean enabled, Image image){
+		super(x, y, 0, 0, enabled);
+		width = image.getWidth();
+		height = image.getHeight();
 		this.image = image;
-		image = image.getScaledCopy(width, height);
 	}
 
 	public Image getImage(){

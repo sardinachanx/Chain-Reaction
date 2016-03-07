@@ -1,5 +1,6 @@
 package menu;
 
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public abstract class Button{
@@ -8,14 +9,14 @@ public abstract class Button{
 	protected int y;
 	protected int width;
 	protected int height;
-	protected boolean visible;
+	protected boolean enabled;
 
-	public Button(int x, int y, int width, int height, boolean visible){
+	public Button(int x, int y, int width, int height, boolean enabled){
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.visible = visible;
+		this.enabled = enabled;
 	}
 
 	public int getX(){
@@ -34,8 +35,8 @@ public abstract class Button{
 		return height;
 	}
 
-	public boolean isVisible(){
-		return visible;
+	public boolean isEnabled(){
+		return enabled;
 	}
 
 	public void setX(int x){
@@ -54,11 +55,11 @@ public abstract class Button{
 		this.height = height;
 	}
 
-	public void setVisible(boolean visible){
-		this.visible = visible;
+	public void setEnabled(boolean enabled){
+		this.enabled = enabled;
 	}
 
-	public abstract void clicked();
+	public abstract void clicked(GameContainer gc);
 
 	public abstract void render(Graphics g);
 
