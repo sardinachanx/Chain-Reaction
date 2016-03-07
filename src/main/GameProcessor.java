@@ -36,8 +36,6 @@ public class GameProcessor implements Processor{
 	protected Set<Ball> balls;
 	protected Set<Ball> removed;
 	protected ExpandBall expandBall;
-	protected boolean started;
-	protected boolean finished;
 	protected long score;
 	protected long currentLevelScore;
 	protected int ballsExpanded;
@@ -46,8 +44,13 @@ public class GameProcessor implements Processor{
 	protected GameMode gameMode;
 	protected Level level;
 
-	public GameProcessor(){
+	protected boolean started;
+	protected boolean finished;
+	protected boolean paused;
+	protected boolean initialized;
 
+	public GameProcessor(){
+		initialized = false;
 	}
 
 	@Override
@@ -88,12 +91,17 @@ public class GameProcessor implements Processor{
 		started = false;
 		level = newLevelFromGameMode(GameMode.ORIGINAL);
 		score = 0;
+		paused = false;
 		gameMode = GameMode.ORIGINAL;
 		restart(gc);
+		initialized = true;
 	}
 
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException{
+		if(paused){
+			return;
+		}
 		Input input = gc.getInput();
 		if(input.isKeyPressed(Input.KEY_0)){
 			ballsExpanded = level.getLevelThreshold();
@@ -120,12 +128,13 @@ public class GameProcessor implements Processor{
 				ballsExpanded = level.getLevelThreshold();
 				restart(gc);
 			}
-			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON)){
+			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !crossesMenu(input)){
 				started = true;
 			}
 		}
 		if(finished){
-			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) || input.isKeyPressed(Input.KEY_SPACE)){
+			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !crossesMenu(input)
+					|| input.isKeyPressed(Input.KEY_SPACE)){
 				restart(gc);
 			}
 			return;
@@ -164,7 +173,8 @@ public class GameProcessor implements Processor{
 				}
 			}
 		}
-		if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !expandBall.isExpanding() && !expandBall.isExpanded()){
+		if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !expandBall.isExpanding() && !expandBall.isExpanded()
+				&& !crossesMenu(input)){
 			expandBall.startExpanding();
 		}
 		balls.removeAll(removed);
@@ -176,6 +186,14 @@ public class GameProcessor implements Processor{
 
 	public void setGameMode(GameMode gameMode){
 		this.gameMode = gameMode;
+	}
+
+	public boolean isPaused(){
+		return paused;
+	}
+
+	public void setPaused(boolean paused){
+		this.paused = paused;
 	}
 
 	private void restart(GameContainer gc) throws SlickException{
@@ -216,6 +234,20 @@ public class GameProcessor implements Processor{
 				throw new IllegalArgumentException("Game Mode unsupported.");
 
 		}
+	}
+
+	@Override
+	public boolean initialized(){
+		return initialized;
+	}
+
+	@Override
+	public int order(){
+		return 1;
+	}
+
+	private boolean crossesMenu(Input input){
+		return input.getMouseX() > GUIProcessor.GAMEMENU_X && input.getMouseY() < GUIProcessor.GAMEMENU_Y;
 	}
 
 }

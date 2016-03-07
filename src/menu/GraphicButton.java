@@ -5,8 +5,8 @@ import org.newdawn.slick.Image;
 
 public abstract class GraphicButton extends Button{
 
-	private static final int DEFAULT_HEIGHT = 50;
-	private static final int DEFAULT_WIDTH = 50;
+	private static final int DEFAULT_HEIGHT = 30;
+	private static final int DEFAULT_WIDTH = 30;
 
 	Image image;
 
@@ -34,7 +34,7 @@ public abstract class GraphicButton extends Button{
 
 	@Override
 	public void render(Graphics g){
-		g.drawImage(image, x, y);
+		g.drawImage(image, x - width / 2, y - height / 2);
 	}
 
 }

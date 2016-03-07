@@ -6,6 +6,10 @@ import org.newdawn.slick.SlickException;
 
 public interface Processor{
 
+	public boolean initialized();
+
+	public int order();
+
 	public void init(GameContainer gc) throws SlickException;
 
 	public void render(GameContainer gc, Graphics g) throws SlickException;

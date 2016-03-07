@@ -93,7 +93,7 @@ public abstract class TextButton extends Button{
 		g.setColor(buttonColor);
 		g.drawRect(x, y, width, height);
 		g.setColor(textColor);
-		g.drawString(text, x - g.getFont().getWidth(text), g.getFont().getHeight(text));
+		g.drawString(text, x - g.getFont().getWidth(text) / 2, g.getFont().getHeight(text) / 2);
 	}
 
 }
