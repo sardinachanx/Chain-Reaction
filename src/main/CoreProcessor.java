@@ -21,16 +21,17 @@ public class CoreProcessor extends BasicGame{
 	protected Set<Processor> processors;
 	protected Set<Processor> running;
 
+	protected boolean startUpComplete;
 	protected boolean debug;
 	protected Font font;
 
 	public CoreProcessor(boolean debug){
 		super("Chain Reaction");
 		this.debug = debug;
-		gp = new GameProcessor(debug);
+		gp = new GameProcessor(this, debug);
 		gup = new GUIProcessor(this);
 		ssp = new StartupScreenProcessor(this);
-		hp = new HelpProcessor();
+		hp = new HelpProcessor(this);
 		processors = new HashSet<Processor>();
 		processors.add(gp);
 		processors.add(gup);
@@ -114,11 +115,11 @@ public class CoreProcessor extends BasicGame{
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException{
 		// TODO Auto-generated method stub
-		//gp.update(gc, delta);
 		Input input = gc.getInput();
-		if(ssp.hasStartUp()){
+		if(!startUpComplete && ssp.hasStartUp()){
 			running.remove(ssp);
-			running.add(gup);
+			running.add(hp);
+			startUpComplete = true;
 		}
 		for(Processor processor : running){
 			processor.update(gc, delta);
@@ -144,10 +145,10 @@ public class CoreProcessor extends BasicGame{
 
 	public void setGUIProcessorState(boolean on){
 		if(on){
-			running.add(gp);
+			running.add(gup);
 		}
 		else{
-			running.remove(gp);
+			running.remove(gup);
 		}
 	}
 
