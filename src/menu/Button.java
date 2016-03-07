@@ -1,19 +1,21 @@
 package menu;
 
+import org.newdawn.slick.Graphics;
+
 public abstract class Button{
 
 	protected int x;
 	protected int y;
-	protected String text;
-	protected int sizeX;
-	protected int sizeY;
+	protected int width;
+	protected int height;
+	protected boolean visible;
 
-	public Button(int x, int y, int sizeX, int sizeY, String text){
+	public Button(int x, int y, int width, int height, boolean visible){
 		this.x = x;
 		this.y = y;
-		this.sizeX = sizeX;
-		this.sizeY = sizeY;
-		this.text = text;
+		this.width = width;
+		this.height = height;
+		this.visible = visible;
 	}
 
 	public int getX(){
@@ -24,16 +26,16 @@ public abstract class Button{
 		return y;
 	}
 
-	public int getSizeX(){
-		return sizeX;
+	public int getWidth(){
+		return width;
 	}
 
-	public int getSizeY(){
-		return sizeY;
+	public int getHeight(){
+		return height;
 	}
 
-	public String getText(){
-		return text;
+	public boolean isVisible(){
+		return visible;
 	}
 
 	public void setX(int x){
@@ -44,17 +46,20 @@ public abstract class Button{
 		this.y = y;
 	}
 
-	public void setSizeX(int sizeX){
-		this.sizeX = sizeX;
+	public void setWidth(int width){
+		this.width = width;
 	}
 
-	public void setSizeY(int sizeY){
-		this.sizeY = sizeY;
+	public void setHeight(int height){
+		this.height = height;
 	}
 
-	public void setText(String text){
-		this.text = text;
+	public void setVisible(boolean visible){
+		this.visible = visible;
 	}
 
-	protected abstract void clicked();
+	public abstract void clicked();
+
+	public abstract void render(Graphics g);
+
 }
