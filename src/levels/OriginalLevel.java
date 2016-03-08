@@ -23,7 +23,7 @@ public class OriginalLevel extends Level{
 
 	@Override
 	public Level getNextLevel(){
-		return new OriginalLevel(getLevel() % 12 + 1);
+		return new OriginalLevel(getLevelNumber() % 12 + 1);
 	}
 
 }

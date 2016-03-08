@@ -20,12 +20,12 @@ import objects.GameBall;
 
 public class GameProcessor implements Processor{
 
-	public static final int INITIAL_BALL_RADIUS = 8;
-	public static final int INITIAL_EXPANDBALL_RADIUS = 50;
-	public static final int EXPANDED_BALL_RADIUS = 50;
-	public static final int MAX_TIMER = 3000;
-	public static final int EXPAND_SPEED = 3;
-	public static final int SHRINK_SPEED = 4;
+	protected static final int INITIAL_BALL_RADIUS = 8;
+	protected static final int INITIAL_EXPANDBALL_RADIUS = 50;
+	protected static final int EXPANDED_BALL_RADIUS = 50;
+	protected static final int MAX_TIMER = 3000;
+	protected static final int EXPAND_SPEED = 3;
+	protected static final int SHRINK_SPEED = 4;
 
 	private static final int SCORE_X = 10;
 	private static final int SCORE_Y = 10;
@@ -33,6 +33,11 @@ public class GameProcessor implements Processor{
 	private static final int BALL_Y = SCORE_Y + OFFSET;
 	private static final int MODE_Y = BALL_Y + OFFSET;
 	private static final int SCORE_FACTOR = 100;
+
+	private static final String LEVEL_PASSED = "click anywhere or press space for the next level";
+	private static final String LEVEL_FAILED = "click anywhere or press space to replay level";
+	private static final String GAME_RESTART = "click anywhere or press space to restart game";
+	private static final int END_OFFSET = 45;
 
 	protected Set<Ball> balls;
 	protected Set<Ball> removed;
@@ -85,8 +90,36 @@ public class GameProcessor implements Processor{
 		}
 		g.setColor(Color.white);
 		g.drawString("Score: " + (currentLevelScore + score), SCORE_X, SCORE_Y);
-		g.drawString(ballsExpanded + " out of " + level.getBallNum() + " expanded", SCORE_X, BALL_Y);
-		g.drawString("Mode: " + gameMode.getName() + " Level " + level.getLevel(), SCORE_X, MODE_Y);
+		g.drawString(
+				ballsExpanded + " out of " + level.getBallNum() + " expanded"
+						+ (gameMode == GameMode.INFINTE ? "" : "(" + level.getLevelThreshold() + " needed)"),
+				SCORE_X, BALL_Y);
+		g.drawString("Mode: " + gameMode.getName() + " Level " + level.getLevelNumber(), SCORE_X, MODE_Y);
+		if(finished){
+			String s = ballsExpanded + " out of " + level.getBallNum() + " expanded";
+			g.drawString(s, GameEngine.WIDTH / 2 - g.getFont().getWidth(s) / 2,
+					GameEngine.HEIGHT / 2 - g.getFont().getHeight(s) / 2);
+			if(ballsExpanded >= level.getLevelThreshold()){
+				if(level.getLevelNumber() != 12){
+					g.drawString(LEVEL_PASSED, GameEngine.WIDTH / 2 - g.getFont().getWidth(LEVEL_PASSED) / 2,
+							GameEngine.HEIGHT / 2 - g.getFont().getHeight(LEVEL_PASSED) + END_OFFSET);
+				}
+				else{
+					g.drawString(GAME_RESTART, GameEngine.WIDTH / 2 - g.getFont().getWidth(GAME_RESTART) / 2,
+							GameEngine.HEIGHT / 2 - g.getFont().getHeight(GAME_RESTART) + END_OFFSET);
+				}
+			}
+			else{
+				if(gameMode != GameMode.SURVIVAL){
+					g.drawString(LEVEL_FAILED, GameEngine.WIDTH / 2 - g.getFont().getWidth(LEVEL_FAILED) / 2,
+							GameEngine.HEIGHT / 2 - g.getFont().getHeight(LEVEL_FAILED) + END_OFFSET);
+				}
+				else{
+					g.drawString(GAME_RESTART, GameEngine.WIDTH / 2 - g.getFont().getWidth(GAME_RESTART) / 2,
+							GameEngine.HEIGHT / 2 - g.getFont().getHeight(GAME_RESTART) + END_OFFSET);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -203,7 +236,7 @@ public class GameProcessor implements Processor{
 		balls.clear();
 		if(ballsExpanded >= level.getLevelThreshold()){
 			level = level.getNextLevel();
-			if(level.getLevel() > 1){
+			if(level.getLevelNumber() > 1){
 				score += currentLevelScore;
 			}
 			else{

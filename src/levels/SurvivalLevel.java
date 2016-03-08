@@ -13,7 +13,7 @@ public class SurvivalLevel extends ProceduralLevel{
 
 	@Override
 	public Level getNextLevel(){
-		return new SurvivalLevel(getLevel() + 1);
+		return new SurvivalLevel(getLevelNumber() + 1);
 	}
 
 }

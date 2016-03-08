@@ -20,7 +20,7 @@ public abstract class Level{
 		return levelThreshold;
 	}
 
-	public int getLevel(){
+	public int getLevelNumber(){
 		return level;
 	}
 

@@ -13,7 +13,7 @@ public class InfiniteLevel extends ProceduralLevel{
 
 	@Override
 	public Level getNextLevel(){
-		return new InfiniteLevel(getLevel() + 1);
+		return new InfiniteLevel(getLevelNumber() + 1);
 	}
 
 }
