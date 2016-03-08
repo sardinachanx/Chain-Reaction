@@ -15,17 +15,21 @@ public class AudioLooper implements Runnable{
 	private static final Object LOCK = new Object();
 
 	protected volatile boolean paused;
+	protected volatile boolean restart;
 	protected String audio;
 	protected boolean on;
 
 	public AudioLooper(String audio){
 		this.audio = audio;
 		on = true;
+		paused = true;
+		restart = false;
 	}
 
 	@Override
 	public void run(){
 		while(on){
+			restart = false;
 			synchronized(LOCK){
 				SourceDataLine line = null;
 				try{
@@ -39,7 +43,7 @@ public class AudioLooper implements Runnable{
 					int bufferLength = 0;
 					line.start();
 					bufferLength = stream.read(buffer);
-					while(bufferLength >= 0 && on){
+					while(bufferLength >= 0 && on && !restart){
 						while(paused){
 							LOCK.wait();
 						}
@@ -71,6 +75,9 @@ public class AudioLooper implements Runnable{
 	}
 
 	public void setPaused(boolean paused){
+		if(paused == this.paused){
+			return;
+		}
 		this.paused = paused;
 		if(!paused){
 			synchronized(LOCK){
@@ -81,6 +88,10 @@ public class AudioLooper implements Runnable{
 
 	public boolean isPaused(){
 		return paused;
+	}
+
+	public boolean isRestart(){
+		return restart;
 	}
 
 	/*public static void main(String[] args) throws InterruptedException{

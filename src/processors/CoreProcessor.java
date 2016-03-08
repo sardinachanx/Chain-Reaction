@@ -1,7 +1,10 @@
 package processors;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -12,12 +15,15 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+import audio.AudioLooper;
+
 public class CoreProcessor extends BasicGame{
 
 	protected GameProcessor gp;
 	protected GUIProcessor gup;
 	protected StartupScreenProcessor ssp;
 	protected HelpProcessor hp;
+	protected List<AudioLooper> audioFiles;
 	protected Set<Processor> processors;
 	protected Set<Processor> running;
 
@@ -28,10 +34,19 @@ public class CoreProcessor extends BasicGame{
 	public CoreProcessor(boolean debug){
 		super("Chain Reaction");
 		this.debug = debug;
+		audioFiles = new ArrayList<AudioLooper>();
 		gp = new GameProcessor(this, debug);
 		gup = new GUIProcessor(this);
 		ssp = new StartupScreenProcessor(this);
 		hp = new HelpProcessor(this);
+		AudioLooper original = new AudioLooper("assets" + File.separator + "original.wav");
+		AudioLooper infinite = new AudioLooper("assets" + File.separator + "infinite.wav");
+		AudioLooper survival = new AudioLooper("assets" + File.separator + "survival.wav");
+		AudioLooper starting = new AudioLooper("assets" + File.separator + "starting.wav");
+		audioFiles.add(starting);
+		audioFiles.add(original);
+		audioFiles.add(infinite);
+		audioFiles.add(survival);
 		processors = new HashSet<Processor>();
 		processors.add(gp);
 		processors.add(gup);
@@ -93,6 +108,10 @@ public class CoreProcessor extends BasicGame{
 		return running;
 	}
 
+	public List<AudioLooper> getAudioFiles(){
+		return audioFiles;
+	}
+
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException{
 		//TODO
@@ -119,6 +138,7 @@ public class CoreProcessor extends BasicGame{
 		if(!startUpComplete && ssp.hasStartUp()){
 			running.remove(ssp);
 			running.add(hp);
+			audioFiles.get(0).setPaused(false);
 			startUpComplete = true;
 		}
 		for(Processor processor : running){

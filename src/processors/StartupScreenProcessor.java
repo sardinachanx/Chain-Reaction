@@ -24,6 +24,10 @@ public class StartupScreenProcessor implements Processor{
 	@Override
 	public void init(GameContainer gc) throws SlickException{
 		cp.setFont(new TrueTypeFont(new Font("American Typewriter", Font.PLAIN, 18), true));
+		for(int i = 0; i < cp.getAudioFiles().size(); i++){
+			Thread thread = new Thread(cp.getAudioFiles().get(i));
+			thread.start();
+		}
 		initialized = true;
 	}
 
