@@ -182,7 +182,7 @@ public class GUIProcessor implements Processor{
 		Random random = new Random();
 		for(int i = 0; i < BACKGROUND_BALLS; i++){
 			GameBall ball = new GameBall(GameProcessor.INITIAL_BALL_RADIUS,
-					new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)), gc);
+					new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)).darker(), gc);
 			backgroundBalls.add(ball);
 		}
 		backgroundOn = true;
@@ -192,6 +192,13 @@ public class GUIProcessor implements Processor{
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException{
 		// TODO Auto-generated method stub
+		if(backgroundOn){
+			for(Ball ball : backgroundBalls){
+				g.setColor(ball.getColor());
+				g.fillOval(ball.getX() - ball.getRadius(), ball.getY() - ball.getRadius(), ball.getRadius() * 2,
+						ball.getRadius() * 2);
+			}
+		}
 		for(Button button : buttons){
 			if(button.isEnabled()){
 				button.render(g);
@@ -199,13 +206,6 @@ public class GUIProcessor implements Processor{
 		}
 		if(!cp.gameProcessorOn()){
 			g.setBackground(Color.black);
-		}
-		if(backgroundOn){
-			for(Ball ball : backgroundBalls){
-				g.setColor(ball.getColor());
-				g.fillOval(ball.getX() - ball.getRadius(), ball.getY() - ball.getRadius(), ball.getRadius() * 2,
-						ball.getRadius() * 2);
-			}
 		}
 	}
 
@@ -251,13 +251,6 @@ public class GUIProcessor implements Processor{
 		return 2;
 	}
 
-	private boolean clickingButton(Button button, Input input){
-		int mouseX = input.getMouseX();
-		int mouseY = input.getMouseY();
-		return mouseX > button.getX() - button.getWidth() / 2 && mouseX < button.getX() + button.getWidth() / 2
-				&& mouseY > button.getY() - button.getHeight() / 2 && mouseY < button.getY() + button.getHeight() / 2;
-	}
-
 	public Set<Button> getButtons(){
 		return buttons;
 	}
@@ -268,6 +261,13 @@ public class GUIProcessor implements Processor{
 
 	public Set<Button> getGameButtons(){
 		return gameButtons;
+	}
+
+	private boolean clickingButton(Button button, Input input){
+		int mouseX = input.getMouseX();
+		int mouseY = input.getMouseY();
+		return mouseX > button.getX() - button.getWidth() / 2 && mouseX < button.getX() + button.getWidth() / 2
+				&& mouseY > button.getY() - button.getHeight() / 2 && mouseY < button.getY() + button.getHeight() / 2;
 	}
 
 	private void startGame(GameContainer gc){
