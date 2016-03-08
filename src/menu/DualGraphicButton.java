@@ -7,12 +7,18 @@ public abstract class DualGraphicButton extends GraphicButton{
 
 	Image imageTwo;
 	Image[] images;
-	int currentImage;
+	private int currentImage;
+
+	public DualGraphicButton(int x, int y, Image imageOne, Image imageTwo){
+		this(x, y, true, imageOne, imageTwo);
+	}
 
 	public DualGraphicButton(int x, int y, boolean enabled, Image imageOne, Image imageTwo){
-		super(x, y, enabled, imageOne);
+		super(x, y, true, imageOne);
 		this.imageTwo = imageTwo;
 		images = new Image[2];
+		images[0] = image;
+		images[1] = imageTwo;
 	}
 
 	public Image getImageTwo(){
@@ -23,9 +29,17 @@ public abstract class DualGraphicButton extends GraphicButton{
 		this.imageTwo = imageTwo;
 	}
 
+	public int getCurrentImage(){
+		return currentImage;
+	}
+
+	public void setCurrentImage(int currentImage){
+		this.currentImage = currentImage;
+	}
+
 	@Override
 	public void render(Graphics g){
-		g.drawImage(images[currentImage], x - width / 2, y - height / 2);
+		g.drawImage(images[getCurrentImage()], x - width / 2, y - height / 2);
 	}
 
 }

@@ -3,6 +3,7 @@ package processors;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -91,12 +92,12 @@ public class GameProcessor implements Processor{
 			}
 		}
 		g.setColor(Color.white);
-		g.drawString("Score: " + (currentLevelScore + score), SCORE_X, SCORE_Y);
+		g.drawString("score: " + (currentLevelScore + score), SCORE_X, SCORE_Y);
 		g.drawString(
 				ballsExpanded + " out of " + level.getBallNum() + " expanded"
 						+ (gameMode == GameMode.INFINITE ? "" : " (" + level.getLevelThreshold() + " needed)"),
 				SCORE_X, BALL_Y);
-		g.drawString("Mode: " + gameMode.getName() + " Level " + level.getLevelNumber(), SCORE_X, MODE_Y);
+		g.drawString("mode: " + gameMode.getName().toLowerCase() + " level " + level.getLevelNumber(), SCORE_X, MODE_Y);
 		if(finished){
 			String s = ballsExpanded + " out of " + level.getBallNum() + " expanded";
 			g.drawString(s, GameEngine.WIDTH / 2 - g.getFont().getWidth(s) / 2,
@@ -257,6 +258,17 @@ public class GameProcessor implements Processor{
 		else{
 			if(gameMode == GameMode.SURVIVAL){
 				level = newLevelFromGameMode(GameMode.SURVIVAL).getNextLevel();
+				cp.getCurrentAudio().setPaused(true);
+				cp.getCurrentAudio().setRestart(true);
+				try{
+					TimeUnit.SECONDS.sleep(1);
+				}
+				catch(InterruptedException e){
+
+				}
+				finally{
+					cp.getCurrentAudio().setPaused(false);
+				}
 			}
 		}
 		for(int i = 0; i < level.getBallNum(); i++){

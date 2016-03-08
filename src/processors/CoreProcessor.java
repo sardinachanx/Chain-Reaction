@@ -35,12 +35,14 @@ public class CoreProcessor extends BasicGame{
 
 	protected boolean startUpComplete;
 	protected boolean debug;
+	protected boolean audioOn;
 	protected Font font;
 	protected AudioLooper currentAudio;
 
 	public CoreProcessor(boolean debug){
 		super("Chain Reaction");
 		this.debug = debug;
+		audioOn = true;
 		audioFiles = new ArrayList<AudioLooper>();
 		gp = new GameProcessor(this, debug);
 		gup = new GUIProcessor(this);
@@ -129,7 +131,9 @@ public class CoreProcessor extends BasicGame{
 			this.currentAudio.setRestart(true);
 		}
 		this.currentAudio = currentAudio;
-		this.currentAudio.setPaused(false);
+		if(audioOn){
+			this.currentAudio.setPaused(false);
+		}
 	}
 
 	@Override
@@ -244,12 +248,29 @@ public class CoreProcessor extends BasicGame{
 	}
 
 	public void playPauseCurrentAudio(){
-		if(currentAudio.isPaused()){
-			currentAudio.setPaused(false);
+		if(audioOn){
+			if(currentAudio.isPaused()){
+				currentAudio.setPaused(false);
+			}
+			else{
+				currentAudio.setPaused(true);
+			}
 		}
-		else{
-			currentAudio.setPaused(true);
+	}
+
+	public void pauseAll(){
+		for(AudioLooper al : audioFiles){
+			al.setPaused(true);
 		}
+		audioOn = false;
+	}
+
+	public boolean isAudioOn(){
+		return audioOn;
+	}
+
+	public void setAudioOn(boolean audioOn){
+		this.audioOn = audioOn;
 	}
 
 }

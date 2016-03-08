@@ -15,6 +15,7 @@ import org.newdawn.slick.SlickException;
 import main.GameEngine;
 import main.GameMode;
 import menu.Button;
+import menu.DualGraphicButton;
 import menu.GraphicButton;
 import menu.TextButton;
 import objects.Ball;
@@ -22,9 +23,11 @@ import objects.GameBall;
 
 public class GUIProcessor implements Processor{
 
-	public static final int PAUSE_X = GameEngine.WIDTH - 65;
-	public static final int QUIT_X = GameEngine.WIDTH - 25;
-	public static final int QUIT_Y = 25;
+	public static final int SOUND_X = GameEngine.WIDTH - 25;
+	public static final int MENU_ICON_OFFSET = 40;
+	public static final int QUIT_X = SOUND_X - MENU_ICON_OFFSET;
+	public static final int PAUSE_X = QUIT_X - MENU_ICON_OFFSET;
+	public static final int MENU_ICON_Y = 25;
 	public static final int STARTUP_MENU_X = GameEngine.WIDTH / 2;
 	public static final int STARTUP_OFFSET = 100;
 	public static final int ORIGINAL_Y = GameEngine.HEIGHT / 2 - 10;
@@ -32,7 +35,7 @@ public class GUIProcessor implements Processor{
 	public static final int SURVIVAL_Y = INFINITE_Y + STARTUP_OFFSET;
 	public static final int TITLE_Y = GameEngine.HEIGHT / 4 + 10;
 
-	public static final int GAMEMENU_X = GameEngine.WIDTH - 80;
+	public static final int GAMEMENU_X = GameEngine.WIDTH - 110;
 	public static final int GAMEMENU_Y = 45;
 	public static final int STARTUP_MENU_WIDTH = 300;
 	public static final int STARTUP_MENU_HEIGHT = 80;
@@ -62,7 +65,8 @@ public class GUIProcessor implements Processor{
 		menuButtons = new HashSet<Button>();
 		gameButtons = new HashSet<Button>();
 		backgroundBalls = new HashSet<Ball>();
-		Button pause = new GraphicButton(PAUSE_X, QUIT_Y, new Image("assets" + File.separator + "PauseButton.png")){
+		Button pause = new GraphicButton(PAUSE_X, MENU_ICON_Y,
+				new Image("assets" + File.separator + "PauseButton.png")){
 
 			@Override
 			public void clicked(GameContainer gc){
@@ -78,7 +82,8 @@ public class GUIProcessor implements Processor{
 		};
 		buttons.add(pause);
 		gameButtons.add(pause);
-		Button quit = new GraphicButton(QUIT_X, QUIT_Y, new Image("assets" + File.separator + "QuitButton.png")){
+
+		Button quit = new GraphicButton(QUIT_X, MENU_ICON_Y, new Image("assets" + File.separator + "QuitButton.png")){
 
 			@Override
 			public void clicked(GameContainer gc){
@@ -96,6 +101,27 @@ public class GUIProcessor implements Processor{
 		};
 		buttons.add(quit);
 		gameButtons.add(quit);
+
+		Button sound = new DualGraphicButton(SOUND_X, MENU_ICON_Y, new Image("assets" + File.separator + "SoundOn.png"),
+				new Image("assets" + File.separator + "SoundOff.png")){
+
+			@Override
+			public void clicked(GameContainer gc){
+				setCurrentImage((getCurrentImage() + 1) % 2);
+				if(getCurrentImage() == 0){
+					cp.setAudioOn(true);
+					cp.playPauseCurrentAudio();
+				}
+				else{
+					cp.setAudioOn(false);
+					cp.pauseAll();
+				}
+			}
+
+		};
+
+		buttons.add(sound);
+
 		Button original = new TextButton(STARTUP_MENU_X, ORIGINAL_Y, STARTUP_MENU_WIDTH, STARTUP_MENU_HEIGHT, true,
 				"Original"){
 
@@ -109,6 +135,7 @@ public class GUIProcessor implements Processor{
 		};
 		buttons.add(original);
 		menuButtons.add(original);
+
 		Button infinite = new TextButton(STARTUP_MENU_X, INFINITE_Y, STARTUP_MENU_WIDTH, STARTUP_MENU_HEIGHT, true,
 				"Infinite"){
 
@@ -122,6 +149,7 @@ public class GUIProcessor implements Processor{
 		};
 		buttons.add(infinite);
 		menuButtons.add(infinite);
+
 		Button survival = new TextButton(STARTUP_MENU_X, SURVIVAL_Y, STARTUP_MENU_WIDTH, STARTUP_MENU_HEIGHT, true,
 				"Survival"){
 
@@ -147,13 +175,14 @@ public class GUIProcessor implements Processor{
 		};
 		buttons.add(title);
 		menuButtons.add(title);
+
 		for(Button button : getGameButtons()){
 			button.setEnabled(false);
 		}
 		Random random = new Random();
 		for(int i = 0; i < BACKGROUND_BALLS; i++){
 			GameBall ball = new GameBall(GameProcessor.INITIAL_BALL_RADIUS,
-					new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)).brighter(), gc);
+					new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)), gc);
 			backgroundBalls.add(ball);
 		}
 		backgroundOn = true;
