@@ -78,11 +78,14 @@ public class AudioLooper implements Runnable{
 		if(paused == this.paused){
 			return;
 		}
-		this.paused = paused;
 		if(!paused){
 			synchronized(LOCK){
+				this.paused = false;
 				LOCK.notifyAll();
 			}
+		}
+		else{
+			this.paused = true;
 		}
 	}
 
@@ -93,14 +96,5 @@ public class AudioLooper implements Runnable{
 	public boolean isRestart(){
 		return restart;
 	}
-
-	/*public static void main(String[] args) throws InterruptedException{
-		AudioLooper al = new AudioLooper("assets" + File.separator + "infinite.wav");
-		new Thread(al).start();
-		Thread.sleep(3000);
-		al.setPaused(true);
-		Thread.sleep(3000);
-		al.setPaused(false);
-	}*/
 
 }
