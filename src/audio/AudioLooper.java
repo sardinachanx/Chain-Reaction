@@ -97,4 +97,8 @@ public class AudioLooper implements Runnable{
 		return restart;
 	}
 
+	public void setRestart(boolean restart){
+		this.restart = restart;
+	}
+
 }

@@ -94,7 +94,7 @@ public class GameProcessor implements Processor{
 		g.drawString("Score: " + (currentLevelScore + score), SCORE_X, SCORE_Y);
 		g.drawString(
 				ballsExpanded + " out of " + level.getBallNum() + " expanded"
-						+ (gameMode == GameMode.INFINTE ? "" : "(" + level.getLevelThreshold() + " needed)"),
+						+ (gameMode == GameMode.INFINITE ? "" : "(" + level.getLevelThreshold() + " needed)"),
 				SCORE_X, BALL_Y);
 		g.drawString("Mode: " + gameMode.getName() + " Level " + level.getLevelNumber(), SCORE_X, MODE_Y);
 		if(finished){
@@ -162,7 +162,7 @@ public class GameProcessor implements Processor{
 				restart(gc);
 			}
 			if(input.isKeyPressed(Input.KEY_D) && isDebug()){
-				gameMode = GameMode.INFINTE;
+				gameMode = GameMode.INFINITE;
 				resetLevel();
 				restart(gc);
 			}
@@ -222,6 +222,10 @@ public class GameProcessor implements Processor{
 		}
 	}
 
+	public GameMode getGameMode(){
+		return gameMode;
+	}
+
 	public void setGameMode(GameMode gameMode){
 		this.gameMode = gameMode;
 	}
@@ -267,7 +271,7 @@ public class GameProcessor implements Processor{
 		switch(gameMode){
 			case SURVIVAL:
 				return new SurvivalLevel(0);
-			case INFINTE:
+			case INFINITE:
 				return new InfiniteLevel(0);
 			case ORIGINAL:
 				return new OriginalLevel(0);

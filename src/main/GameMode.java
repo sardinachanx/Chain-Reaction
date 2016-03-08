@@ -2,7 +2,7 @@ package main;
 
 public enum GameMode{
 
-	ORIGINAL("Original"), INFINTE("Infinite"), SURVIVAL("Survival");
+	ORIGINAL("Original"), INFINITE("Infinite"), SURVIVAL("Survival");
 
 	private String name;
 

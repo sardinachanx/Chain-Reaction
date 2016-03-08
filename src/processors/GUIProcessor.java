@@ -59,9 +59,11 @@ public class GUIProcessor implements Processor{
 			public void clicked(GameContainer gc){
 				if(!cp.getGp().isPaused()){
 					cp.getGp().setPaused(true);
+					cp.getCurrentAudio(cp.getGp().getGameMode()).setPaused(true);
 				}
 				else{
 					cp.getGp().setPaused(false);
+					cp.getCurrentAudio(cp.getGp().getGameMode()).setPaused(false);
 				}
 			}
 
@@ -80,6 +82,9 @@ public class GUIProcessor implements Processor{
 				for(Button button : getGameButtons()){
 					button.setEnabled(false);
 				}
+				cp.getCurrentAudio(cp.getGp().getGameMode()).setPaused(true);
+				cp.getAudioFiles().get(CoreProcessor.MENU_AUDIO).setPaused(false);
+				cp.getCurrentAudio(cp.getGp().getGameMode()).setRestart(true);
 			}
 		};
 		buttons.add(quit);
@@ -90,6 +95,9 @@ public class GUIProcessor implements Processor{
 			@Override
 			public void clicked(GameContainer gc){
 				cp.getGp().setGameMode(GameMode.ORIGINAL);
+				cp.getAudioFiles().get(CoreProcessor.MENU_AUDIO).setPaused(true);
+				cp.getAudioFiles().get(CoreProcessor.ORIGINAL_AUDIO).setPaused(false);
+				cp.getAudioFiles().get(CoreProcessor.MENU_AUDIO).setRestart(true);
 				startGame(gc);
 			}
 
@@ -101,7 +109,10 @@ public class GUIProcessor implements Processor{
 
 			@Override
 			public void clicked(GameContainer gc){
-				cp.getGp().setGameMode(GameMode.INFINTE);
+				cp.getGp().setGameMode(GameMode.INFINITE);
+				cp.getAudioFiles().get(CoreProcessor.MENU_AUDIO).setPaused(true);
+				cp.getAudioFiles().get(CoreProcessor.INFINITE_AUDIO).setPaused(false);
+				cp.getAudioFiles().get(CoreProcessor.MENU_AUDIO).setRestart(true);
 				startGame(gc);
 			}
 
@@ -114,6 +125,9 @@ public class GUIProcessor implements Processor{
 			@Override
 			public void clicked(GameContainer gc){
 				cp.getGp().setGameMode(GameMode.SURVIVAL);
+				cp.getAudioFiles().get(CoreProcessor.MENU_AUDIO).setPaused(true);
+				cp.getAudioFiles().get(CoreProcessor.SURVIVAL_AUDIO).setPaused(false);
+				cp.getAudioFiles().get(CoreProcessor.MENU_AUDIO).setRestart(true);
 				startGame(gc);
 			}
 

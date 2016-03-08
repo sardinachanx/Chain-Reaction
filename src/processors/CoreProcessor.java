@@ -16,8 +16,14 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import audio.AudioLooper;
+import main.GameMode;
 
 public class CoreProcessor extends BasicGame{
+
+	public static final int MENU_AUDIO = 0;
+	public static final int ORIGINAL_AUDIO = 1;
+	public static final int INFINITE_AUDIO = 2;
+	public static final int SURVIVAL_AUDIO = 3;
 
 	protected GameProcessor gp;
 	protected GUIProcessor gup;
@@ -207,6 +213,19 @@ public class CoreProcessor extends BasicGame{
 
 	public Font getFont(){
 		return font;
+	}
+
+	public AudioLooper getCurrentAudio(GameMode gameMode){
+		switch(gameMode){
+			case ORIGINAL:
+				return audioFiles.get(ORIGINAL_AUDIO);
+			case INFINITE:
+				return audioFiles.get(INFINITE_AUDIO);
+			case SURVIVAL:
+				return audioFiles.get(SURVIVAL_AUDIO);
+			default:
+				return audioFiles.get(MENU_AUDIO);
+		}
 	}
 
 }
