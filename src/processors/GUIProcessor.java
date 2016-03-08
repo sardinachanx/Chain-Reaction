@@ -2,6 +2,7 @@ package processors;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import org.newdawn.slick.Color;
@@ -16,6 +17,8 @@ import main.GameMode;
 import menu.Button;
 import menu.GraphicButton;
 import menu.TextButton;
+import objects.Ball;
+import objects.GameBall;
 
 public class GUIProcessor implements Processor{
 
@@ -34,11 +37,16 @@ public class GUIProcessor implements Processor{
 	public static final int STARTUP_MENU_WIDTH = 300;
 	public static final int STARTUP_MENU_HEIGHT = 80;
 
+	private static final int BACKGROUND_BALLS = 20;
+
 	protected Set<Button> buttons;
 	protected Set<Button> menuButtons;
 	protected Set<Button> gameButtons;
 	protected CoreProcessor cp;
 	protected boolean initialized;
+
+	protected Set<Ball> backgroundBalls;
+	protected boolean backgroundOn;
 
 	private boolean mouseWasDown;
 
@@ -53,6 +61,7 @@ public class GUIProcessor implements Processor{
 		buttons = new HashSet<Button>();
 		menuButtons = new HashSet<Button>();
 		gameButtons = new HashSet<Button>();
+		backgroundBalls = new HashSet<Ball>();
 		Button pause = new GraphicButton(PAUSE_X, QUIT_Y, new Image("assets" + File.separator + "PauseButton.png")){
 
 			@Override
@@ -81,6 +90,7 @@ public class GUIProcessor implements Processor{
 				for(Button button : getGameButtons()){
 					button.setEnabled(false);
 				}
+				backgroundOn = true;
 				cp.setCurrentAudio(cp.getAudioFiles().get(CoreProcessor.MENU_AUDIO), true);
 			}
 		};
@@ -140,6 +150,13 @@ public class GUIProcessor implements Processor{
 		for(Button button : getGameButtons()){
 			button.setEnabled(false);
 		}
+		Random random = new Random();
+		for(int i = 0; i < BACKGROUND_BALLS; i++){
+			GameBall ball = new GameBall(GameProcessor.INITIAL_BALL_RADIUS,
+					new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)).brighter(), gc);
+			backgroundBalls.add(ball);
+		}
+		backgroundOn = true;
 		initialized = true;
 	}
 
@@ -153,6 +170,13 @@ public class GUIProcessor implements Processor{
 		}
 		if(!cp.gameProcessorOn()){
 			g.setBackground(Color.black);
+		}
+		if(backgroundOn){
+			for(Ball ball : backgroundBalls){
+				g.setColor(ball.getColor());
+				g.fillOval(ball.getX() - ball.getRadius(), ball.getY() - ball.getRadius(), ball.getRadius() * 2,
+						ball.getRadius() * 2);
+			}
 		}
 	}
 
@@ -177,7 +201,11 @@ public class GUIProcessor implements Processor{
 				button.clicked(gc);
 			}
 		}
-
+		if(backgroundOn){
+			for(Ball ball : backgroundBalls){
+				ball.move(gc);
+			}
+		}
 	}
 
 	public void addButton(TextButton button){
@@ -214,6 +242,7 @@ public class GUIProcessor implements Processor{
 	}
 
 	private void startGame(GameContainer gc){
+		backgroundOn = false;
 		for(Button button : getMenuButtons()){
 			button.setEnabled(false);
 		}
