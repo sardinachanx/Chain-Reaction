@@ -167,12 +167,7 @@ public class GameProcessor implements Processor{
 				resetLevel();
 				restart(gc);
 			}
-			if(isDebug()){
-				if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !crossesMenu(input)){
-					started = true;
-				}
-			}
-			else{
+			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !crossesMenu(input)){
 				started = true;
 			}
 		}
