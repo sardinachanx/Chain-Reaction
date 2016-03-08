@@ -36,6 +36,7 @@ public class CoreProcessor extends BasicGame{
 	protected boolean startUpComplete;
 	protected boolean debug;
 	protected Font font;
+	protected AudioLooper currentAudio;
 
 	public CoreProcessor(boolean debug){
 		super("Chain Reaction");
@@ -118,6 +119,19 @@ public class CoreProcessor extends BasicGame{
 		return audioFiles;
 	}
 
+	public AudioLooper getCurrentAudio(){
+		return currentAudio;
+	}
+
+	public void setCurrentAudio(AudioLooper currentAudio, boolean restart){
+		this.currentAudio.setPaused(true);
+		if(restart){
+			this.currentAudio.setRestart(true);
+		}
+		this.currentAudio = currentAudio;
+		this.currentAudio.setPaused(false);
+	}
+
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException{
 		//TODO
@@ -144,7 +158,8 @@ public class CoreProcessor extends BasicGame{
 		if(!startUpComplete && ssp.hasStartUp()){
 			running.remove(ssp);
 			running.add(hp);
-			audioFiles.get(0).setPaused(false);
+			audioFiles.get(MENU_AUDIO).setPaused(false);
+			currentAudio = audioFiles.get(MENU_AUDIO);
 			startUpComplete = true;
 		}
 		for(Processor processor : running){
@@ -215,7 +230,7 @@ public class CoreProcessor extends BasicGame{
 		return font;
 	}
 
-	public AudioLooper getCurrentAudio(GameMode gameMode){
+	public AudioLooper getCurrentAudioList(GameMode gameMode){
 		switch(gameMode){
 			case ORIGINAL:
 				return audioFiles.get(ORIGINAL_AUDIO);
@@ -225,6 +240,15 @@ public class CoreProcessor extends BasicGame{
 				return audioFiles.get(SURVIVAL_AUDIO);
 			default:
 				return audioFiles.get(MENU_AUDIO);
+		}
+	}
+
+	public void playPauseCurrentAudio(){
+		if(currentAudio.isPaused()){
+			currentAudio.setPaused(false);
+		}
+		else{
+			currentAudio.setPaused(true);
 		}
 	}
 

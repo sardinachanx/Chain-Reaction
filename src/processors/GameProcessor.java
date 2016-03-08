@@ -94,7 +94,7 @@ public class GameProcessor implements Processor{
 		g.drawString("Score: " + (currentLevelScore + score), SCORE_X, SCORE_Y);
 		g.drawString(
 				ballsExpanded + " out of " + level.getBallNum() + " expanded"
-						+ (gameMode == GameMode.INFINITE ? "" : "(" + level.getLevelThreshold() + " needed)"),
+						+ (gameMode == GameMode.INFINITE ? "" : " (" + level.getLevelThreshold() + " needed)"),
 				SCORE_X, BALL_Y);
 		g.drawString("Mode: " + gameMode.getName() + " Level " + level.getLevelNumber(), SCORE_X, MODE_Y);
 		if(finished){
@@ -166,7 +166,12 @@ public class GameProcessor implements Processor{
 				resetLevel();
 				restart(gc);
 			}
-			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !crossesMenu(input)){
+			if(isDebug()){
+				if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !crossesMenu(input)){
+					started = true;
+				}
+			}
+			else{
 				started = true;
 			}
 		}
