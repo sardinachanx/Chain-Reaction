@@ -1,4 +1,4 @@
-package main;
+package processors;
 
 import java.util.Comparator;
 import java.util.HashSet;

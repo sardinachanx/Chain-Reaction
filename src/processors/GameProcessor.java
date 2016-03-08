@@ -1,4 +1,4 @@
-package main;
+package processors;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -14,6 +14,8 @@ import levels.InfiniteLevel;
 import levels.Level;
 import levels.OriginalLevel;
 import levels.SurvivalLevel;
+import main.GameEngine;
+import main.GameMode;
 import objects.Ball;
 import objects.ExpandBall;
 import objects.GameBall;

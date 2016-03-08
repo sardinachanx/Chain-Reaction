@@ -1,4 +1,4 @@
-package main;
+package processors;
 
 import java.io.File;
 import java.util.HashSet;
@@ -11,6 +11,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+import main.GameEngine;
+import main.GameMode;
 import menu.Button;
 import menu.GraphicButton;
 import menu.TextButton;

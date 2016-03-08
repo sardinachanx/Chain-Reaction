@@ -3,6 +3,8 @@ package main;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
+import processors.CoreProcessor;
+
 public class GameEngine{
 
 	public static final int WIDTH = 960;

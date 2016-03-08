@@ -1,4 +1,4 @@
-package main;
+package processors;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,6 +9,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+
+import main.GameEngine;
 
 public class HelpProcessor implements Processor{
 

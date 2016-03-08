@@ -1,4 +1,4 @@
-package main;
+package processors;
 
 import java.awt.Font;
 import java.util.Set;
@@ -7,6 +7,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
+
+import main.GameEngine;
 
 public class StartupScreenProcessor implements Processor{
 
