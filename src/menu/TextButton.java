@@ -3,6 +3,8 @@ package menu;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
+import main.GraphicsEditor;
+
 public abstract class TextButton extends Button{
 
 	private static final int DEFAULT_WIDTH = 50;
@@ -94,7 +96,7 @@ public abstract class TextButton extends Button{
 		g.setColor(buttonColor);
 		g.fillRect(x - width / 2, y - height / 2, width, height);
 		g.setColor(textColor);
-		g.drawString(text, x - g.getFont().getWidth(text) / 2, y - g.getFont().getHeight(text) / 2);
+		g.drawString(text, GraphicsEditor.getCenterX(text, x, g), GraphicsEditor.getCenterY(text, y, g));
 	}
 
 }

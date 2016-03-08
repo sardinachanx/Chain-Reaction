@@ -16,6 +16,7 @@ import levels.OriginalLevel;
 import levels.SurvivalLevel;
 import main.GameEngine;
 import main.GameMode;
+import main.GraphicsEditor;
 import objects.Ball;
 import objects.ExpandBall;
 import objects.GameBall;
@@ -84,8 +85,8 @@ public class GameProcessor implements Processor{
 					g.setColor(Color.white);
 					if(ball.isGameBall()){
 						String ballScore = "+" + ball.getScore() * SCORE_FACTOR;
-						g.drawString(ballScore, ball.getX() - g.getFont().getWidth(ballScore) / 2,
-								ball.getY() - g.getFont().getHeight(ballScore) / 2);
+						g.drawString(ballScore, GraphicsEditor.getCenterX(ballScore, ball.getX(), g),
+								GraphicsEditor.getCenterY(ballScore, ball.getY(), g));
 					}
 				}
 			}
@@ -99,26 +100,26 @@ public class GameProcessor implements Processor{
 		g.drawString("mode: " + gameMode.getName().toLowerCase() + " level " + level.getLevelNumber(), SCORE_X, MODE_Y);
 		if(finished){
 			String s = ballsExpanded + " out of " + level.getBallNum() + " expanded";
-			g.drawString(s, GameEngine.WIDTH / 2 - g.getFont().getWidth(s) / 2,
-					GameEngine.HEIGHT / 2 - g.getFont().getHeight(s) / 2);
+			g.drawString(s, GraphicsEditor.getCenterX(s, GameEngine.WIDTH / 2, g),
+					GraphicsEditor.getCenterY(s, GameEngine.HEIGHT / 2, g));
 			if(ballsExpanded >= level.getLevelThreshold()){
 				if(level.getLevelNumber() != 12){
-					g.drawString(LEVEL_PASSED, GameEngine.WIDTH / 2 - g.getFont().getWidth(LEVEL_PASSED) / 2,
-							GameEngine.HEIGHT / 2 - g.getFont().getHeight(LEVEL_PASSED) + END_OFFSET);
+					g.drawString(LEVEL_PASSED, GraphicsEditor.getCenterX(LEVEL_PASSED, GameEngine.WIDTH / 2, g),
+							GraphicsEditor.getCenterY(LEVEL_PASSED, GameEngine.HEIGHT / 2, g) + END_OFFSET);
 				}
 				else{
-					g.drawString(GAME_RESTART, GameEngine.WIDTH / 2 - g.getFont().getWidth(GAME_RESTART) / 2,
-							GameEngine.HEIGHT / 2 - g.getFont().getHeight(GAME_RESTART) + END_OFFSET);
+					g.drawString(GAME_RESTART, GraphicsEditor.getCenterX(GAME_RESTART, GameEngine.WIDTH / 2, g),
+							GraphicsEditor.getCenterY(GAME_RESTART, GameEngine.HEIGHT / 2, g) + END_OFFSET);
 				}
 			}
 			else{
 				if(gameMode != GameMode.SURVIVAL){
-					g.drawString(LEVEL_FAILED, GameEngine.WIDTH / 2 - g.getFont().getWidth(LEVEL_FAILED) / 2,
-							GameEngine.HEIGHT / 2 - g.getFont().getHeight(LEVEL_FAILED) + END_OFFSET);
+					g.drawString(LEVEL_FAILED, GraphicsEditor.getCenterX(LEVEL_FAILED, GameEngine.WIDTH / 2, g),
+							GraphicsEditor.getCenterY(LEVEL_FAILED, GameEngine.HEIGHT / 2, g) + END_OFFSET);
 				}
 				else{
-					g.drawString(GAME_RESTART, GameEngine.WIDTH / 2 - g.getFont().getWidth(GAME_RESTART) / 2,
-							GameEngine.HEIGHT / 2 - g.getFont().getHeight(GAME_RESTART) + END_OFFSET);
+					g.drawString(GAME_RESTART, GraphicsEditor.getCenterX(GAME_RESTART, GameEngine.WIDTH / 2, g),
+							GraphicsEditor.getCenterY(GAME_RESTART, GameEngine.HEIGHT / 2, g) + END_OFFSET);
 				}
 			}
 		}

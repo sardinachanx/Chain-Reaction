@@ -24,6 +24,8 @@ public class CoreProcessor extends BasicGame{
 	public static final int ORIGINAL_AUDIO = 1;
 	public static final int INFINITE_AUDIO = 2;
 	public static final int SURVIVAL_AUDIO = 3;
+	public static final String HIGH_SCORE_FOLDER = "data";
+	public static final String HIGH_SCORE_LOCATION = HIGH_SCORE_FOLDER + File.separator + "highscore.dat";
 
 	protected GameProcessor gp;
 	protected GUIProcessor gup;

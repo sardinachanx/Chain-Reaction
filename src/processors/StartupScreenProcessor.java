@@ -9,6 +9,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 
 import main.GameEngine;
+import main.GraphicsEditor;
 
 public class StartupScreenProcessor implements Processor{
 
@@ -34,8 +35,8 @@ public class StartupScreenProcessor implements Processor{
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException{
 		String loading = "Please wait while the little birds program the game for you...";
-		g.drawString(loading, GameEngine.WIDTH / 2 - g.getFont().getWidth(loading) / 2,
-				GameEngine.HEIGHT / 2 - g.getFont().getHeight(loading) / 2);
+		g.drawString(loading, GraphicsEditor.getCenterX(loading, GameEngine.WIDTH / 2, g),
+				GraphicsEditor.getCenterY(loading, GameEngine.HEIGHT / 2, g));
 	}
 
 	@Override
