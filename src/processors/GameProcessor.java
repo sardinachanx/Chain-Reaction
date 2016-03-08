@@ -3,7 +3,6 @@ package processors;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -255,15 +254,7 @@ public class GameProcessor implements Processor{
 				level = newLevelFromGameMode(GameMode.SURVIVAL).getNextLevel();
 				cp.getCurrentAudio().setPaused(true);
 				cp.getCurrentAudio().setRestart(true);
-				try{
-					TimeUnit.SECONDS.sleep(1);
-				}
-				catch(InterruptedException e){
-
-				}
-				finally{
-					cp.getCurrentAudio().setPaused(false);
-				}
+				cp.getCurrentAudio().setPaused(false);
 			}
 		}
 		for(int i = 0; i < level.getBallNum(); i++){
