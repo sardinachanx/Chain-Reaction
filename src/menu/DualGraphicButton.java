@@ -21,12 +21,19 @@ public abstract class DualGraphicButton extends GraphicButton{
 		images[1] = imageTwo;
 	}
 
+	@Override
+	public void setImage(Image imageOne){
+		super.setImage(imageOne);
+		images[0] = imageOne;
+	}
+
 	public Image getImageTwo(){
 		return imageTwo;
 	}
 
 	public void setImageTwo(Image imageTwo){
 		this.imageTwo = imageTwo;
+		images[1] = imageTwo;
 	}
 
 	public int getCurrentImage(){
