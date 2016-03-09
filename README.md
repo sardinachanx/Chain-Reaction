@@ -8,12 +8,17 @@ Random offline Chain Reaction game written in Java, inspired by [Yvo Schaap](htt
   - Survival: Level threshold known, medium-low difficulty, 1 life only!
 - Therapeutic (maybe) music for each game mode
 
+~~Disclaimer: I am not responsible if you get a heart attack during Survival mode. Or any other mode. Or in your life. I'm just not responsible for heart attacks in general.~~
+
 
 ##Game Instructions
-Click anywhere to land and expand the bomb. When a ball collides with a bomb or any ball that has hit the bomb, the ball also explodes. You pass the level if enough balls expand. The further the ball is from the bomb, the higher the score.
+Click anywhere to land and expand the bomb. When a ball collides with a bomb or any ball that has hit the bomb, the ball also explodes, and disappears after a while. You pass the level if enough balls expand. The further the ball is from the bomb, the higher the score. 
 
-*Original & Survival Only:* 
-*If you don't pass the level threshold, the amount of lives you use increases by 1. Your final high score depends on how many lives you use, so be careful!*
+*Original Only:* 
+*If you don't pass the level threshold, the amount of lives you use increases by 1 and you have to attempt the level again and pass it before you can move on ~~with life~~. Your final high score depends on how many lives you use, so be careful!*
+
+*Survival Only:*
+*If you die, you go back to Level 1 (and your current score gets entered into the high score table if you go far enough).*
 
 
 ##Features in progress
