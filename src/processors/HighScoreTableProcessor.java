@@ -2,8 +2,10 @@ package processors;
 
 import java.io.File;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 import highscore.HighScore;
@@ -18,14 +20,16 @@ public class HighScoreTableProcessor implements Processor{
 	protected static final String NAME = "name";
 	protected static final String LIVES = "lives";
 	protected static final String SCORE = "score";
+	protected static final String HELP = "press esc to return";
 
 	protected static final int HEADER_Y = 100;
 	protected static final int RANKING_X = 340;
-	protected static final int NAME_X = 420;
-	protected static final int LIVES_X = 520;
-	protected static final int SCORE_X = 580;
+	protected static final int NAME_X = 440;
+	protected static final int LIVES_X = 540;
+	protected static final int SCORE_X = 600;
 	protected static final int STARTING_Y = 160;
 	protected static final int OFFSET = 35;
+	protected static final int HELP_Y = 600;
 
 	protected HighScoreTable highScoreTable;
 	protected boolean initialized;
@@ -43,7 +47,6 @@ public class HighScoreTableProcessor implements Processor{
 
 	@Override
 	public int order(){
-		// TODO Auto-generated method stub
 		return 4;
 	}
 
@@ -52,13 +55,17 @@ public class HighScoreTableProcessor implements Processor{
 		File folder = new File(CoreProcessor.HIGH_SCORE_FOLDER);
 		folder.mkdirs();
 		highScoreTable = HighScoreTable.read(CoreProcessor.HIGH_SCORE_LOCATION);
+		if(highScoreTable == null){
+			highScoreTable = new HighScoreTable();
+		}
 		initialized = true;
 	}
 
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException{
-		g.drawString(HIGHSCORE, GameEngine.WIDTH / 2 - g.getFont().getWidth(HIGHSCORE),
-				HEADER_Y - g.getFont().getHeight(HIGHSCORE));
+		g.setColor(Color.white);
+		g.drawString(HIGHSCORE, GraphicsEditor.getCenterX(HIGHSCORE, GameEngine.WIDTH / 2, g),
+				GraphicsEditor.getCenterY(HIGHSCORE, HEADER_Y, g));
 		g.drawString(RANKING, GraphicsEditor.getCenterX(RANKING, RANKING_X, g),
 				GraphicsEditor.getCenterY(RANKING, STARTING_Y, g));
 		g.drawString(NAME, GraphicsEditor.getCenterX(NAME, NAME_X, g), GraphicsEditor.getCenterY(NAME, STARTING_Y, g));
@@ -72,12 +79,17 @@ public class HighScoreTableProcessor implements Processor{
 			tempY = HEADER_Y + OFFSET;
 			drawRow(highScore, g, index, tempY);
 		}
+		g.drawString(HELP, GraphicsEditor.getCenterX(HELP, GameEngine.WIDTH / 2, g),
+				GraphicsEditor.getCenterY(HELP, HELP_Y, g));
 	}
 
 	@Override
 	public void update(GameContainer gc, int delta) throws SlickException{
-		// TODO Auto-generated method stub
-
+		Input input = gc.getInput();
+		if(input.isKeyPressed(Input.KEY_ESCAPE)){
+			cp.setHighScoreTableProcessorState(false);
+			cp.getGup().setMenuButton(true);
+		}
 	}
 
 	public HighScoreTable getHighScoreTable(){

@@ -28,9 +28,10 @@ public class CoreProcessor extends BasicGame{
 	public static final String HIGH_SCORE_LOCATION = HIGH_SCORE_FOLDER + File.separator + "highscore.dat";
 
 	protected GameProcessor gp;
-	protected GUIProcessor gup;
+	protected GUIProcessor guip;
 	protected StartupScreenProcessor ssp;
 	protected HelpProcessor hp;
+	protected HighScoreTableProcessor hsp;
 	protected List<AudioLooper> audioFiles;
 	protected Set<Processor> processors;
 	protected Set<Processor> running;
@@ -47,9 +48,10 @@ public class CoreProcessor extends BasicGame{
 		audioOn = true;
 		audioFiles = new ArrayList<AudioLooper>();
 		gp = new GameProcessor(this, debug);
-		gup = new GUIProcessor(this);
+		guip = new GUIProcessor(this);
 		ssp = new StartupScreenProcessor(this);
 		hp = new HelpProcessor(this);
+		hsp = new HighScoreTableProcessor(this);
 		AudioLooper original = new AudioLooper("assets" + File.separator + "original.wav");
 		AudioLooper infinite = new AudioLooper("assets" + File.separator + "infinite.wav");
 		AudioLooper survival = new AudioLooper("assets" + File.separator + "survival.wav");
@@ -60,9 +62,10 @@ public class CoreProcessor extends BasicGame{
 		audioFiles.add(survival);
 		processors = new HashSet<Processor>();
 		processors.add(gp);
-		processors.add(gup);
+		processors.add(guip);
 		processors.add(ssp);
 		processors.add(hp);
+		processors.add(hsp);
 		running = new ConcurrentSkipListSet<Processor>(new Comparator<Processor>(){
 
 			@Override
@@ -83,32 +86,20 @@ public class CoreProcessor extends BasicGame{
 		return gp;
 	}
 
-	public void setGp(GameProcessor gp){
-		this.gp = gp;
-	}
-
 	public GUIProcessor getGup(){
-		return gup;
-	}
-
-	public void setGup(GUIProcessor gup){
-		this.gup = gup;
+		return guip;
 	}
 
 	public StartupScreenProcessor getSsp(){
 		return ssp;
 	}
 
-	public void setSsp(StartupScreenProcessor ssp){
-		this.ssp = ssp;
-	}
-
 	public HelpProcessor getHp(){
 		return hp;
 	}
 
-	public void setHp(HelpProcessor hp){
-		this.hp = hp;
+	public HighScoreTableProcessor getHsp(){
+		return hsp;
 	}
 
 	public Set<Processor> getProcessors(){
@@ -174,9 +165,11 @@ public class CoreProcessor extends BasicGame{
 		if(input.isKeyPressed(Input.KEY_GRAVE)){
 			if(gp.isDebug()){
 				gp.setDebug(false);
+				debug = false;
 			}
 			else{
 				gp.setDebug(true);
+				debug = true;
 			}
 		}
 	}
@@ -192,10 +185,10 @@ public class CoreProcessor extends BasicGame{
 
 	public void setGUIProcessorState(boolean on){
 		if(on){
-			running.add(gup);
+			running.add(guip);
 		}
 		else{
-			running.remove(gup);
+			running.remove(guip);
 		}
 	}
 
@@ -208,16 +201,29 @@ public class CoreProcessor extends BasicGame{
 		}
 	}
 
+	public void setHighScoreTableProcessorState(boolean on){
+		if(on){
+			running.add(hsp);
+		}
+		else{
+			running.remove(hsp);
+		}
+	}
+
 	public boolean gameProcessorOn(){
 		return running.contains(gp);
 	}
 
 	public boolean guiProcessorOn(){
-		return running.contains(gup);
+		return running.contains(guip);
 	}
 
 	public boolean helpProcessorOn(){
 		return running.contains(hp);
+	}
+
+	public boolean highScoreTableProcessorOn(){
+		return running.contains(hsp);
 	}
 
 	public void setDebug(boolean debug){

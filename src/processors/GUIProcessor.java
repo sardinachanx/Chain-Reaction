@@ -89,18 +89,28 @@ public class GUIProcessor implements Processor{
 			public void clicked(GameContainer gc){
 				cp.setGameProcessorState(false);
 				cp.getGp().setStarted(false);
-				for(Button button : getMenuButtons()){
-					button.setEnabled(true);
-				}
-				for(Button button : getGameButtons()){
-					button.setEnabled(false);
-				}
+				setMenuButton(true);
+				setGameButton(false);
 				backgroundOn = true;
 				cp.setCurrentAudio(cp.getAudioFiles().get(CoreProcessor.MENU_AUDIO), true);
 			}
 		};
 		buttons.add(quit);
 		gameButtons.add(quit);
+
+		Button highScore = new GraphicButton(QUIT_X, MENU_ICON_Y,
+				new Image("assets" + File.separator + "HighScore.png")){
+
+			@Override
+			public void clicked(GameContainer gc){
+				cp.setHighScoreTableProcessorState(true);
+				setMenuButton(false);
+			}
+
+		};
+
+		buttons.add(highScore);
+		menuButtons.add(highScore);
 
 		Button sound = new DualGraphicButton(SOUND_X, MENU_ICON_Y, new Image("assets" + File.separator + "SoundOn.png"),
 				new Image("assets" + File.separator + "SoundOff.png")){
@@ -272,12 +282,8 @@ public class GUIProcessor implements Processor{
 
 	private void startGame(GameContainer gc){
 		backgroundOn = false;
-		for(Button button : getMenuButtons()){
-			button.setEnabled(false);
-		}
-		for(Button button : getGameButtons()){
-			button.setEnabled(true);
-		}
+		setMenuButton(false);
+		setGameButton(true);
 		cp.getGp().resetLevel();
 		try{
 			cp.getGp().restart(gc);
@@ -286,6 +292,18 @@ public class GUIProcessor implements Processor{
 			e.printStackTrace();
 		}
 		cp.getRunning().add(cp.getGp());
+	}
+
+	public void setMenuButton(boolean on){
+		for(Button button : menuButtons){
+			button.setEnabled(on);
+		}
+	}
+
+	public void setGameButton(boolean on){
+		for(Button button : gameButtons){
+			button.setEnabled(on);
+		}
 	}
 
 }
