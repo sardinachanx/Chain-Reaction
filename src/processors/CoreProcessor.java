@@ -42,6 +42,9 @@ public class CoreProcessor extends BasicGame{
 	protected Font font;
 	protected AudioLooper currentAudio;
 
+	private boolean mouseWasDown;
+	private boolean mouseClicked;
+
 	public CoreProcessor(boolean debug){
 		super("Chain Reaction");
 		this.debug = debug;
@@ -152,6 +155,17 @@ public class CoreProcessor extends BasicGame{
 	public void update(GameContainer gc, int delta) throws SlickException{
 		// TODO Auto-generated method stub
 		Input input = gc.getInput();
+		mouseClicked = false;
+		if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
+			if(!mouseWasDown){
+				mouseClicked = true;
+			}
+			mouseWasDown = true;
+
+		}
+		else{
+			mouseWasDown = false;
+		}
 		if(!startUpComplete && ssp.hasStartUp()){
 			running.remove(ssp);
 			running.add(hp);
@@ -279,6 +293,10 @@ public class CoreProcessor extends BasicGame{
 
 	public void setAudioOn(boolean audioOn){
 		this.audioOn = audioOn;
+	}
+
+	public boolean clicked(){
+		return mouseClicked;
 	}
 
 }

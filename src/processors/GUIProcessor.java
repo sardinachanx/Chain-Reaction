@@ -51,8 +51,6 @@ public class GUIProcessor implements Processor{
 	protected Set<Ball> backgroundBalls;
 	protected boolean backgroundOn;
 
-	private boolean mouseWasDown;
-
 	public GUIProcessor(CoreProcessor cp){
 		this.cp = cp;
 		initialized = false;
@@ -89,10 +87,11 @@ public class GUIProcessor implements Processor{
 			public void clicked(GameContainer gc){
 				cp.setGameProcessorState(false);
 				cp.getGp().setStarted(false);
-				setMenuButton(true);
 				setGameButton(false);
 				backgroundOn = true;
 				cp.setCurrentAudio(cp.getAudioFiles().get(CoreProcessor.MENU_AUDIO), true);
+
+				setMenuButton(true);
 			}
 		};
 		buttons.add(quit);
@@ -133,7 +132,7 @@ public class GUIProcessor implements Processor{
 		buttons.add(sound);
 
 		Button original = new TextButton(STARTUP_MENU_X, ORIGINAL_Y, STARTUP_MENU_WIDTH, STARTUP_MENU_HEIGHT, true,
-				"Original"){
+				"original"){
 
 			@Override
 			public void clicked(GameContainer gc){
@@ -147,7 +146,7 @@ public class GUIProcessor implements Processor{
 		menuButtons.add(original);
 
 		Button infinite = new TextButton(STARTUP_MENU_X, INFINITE_Y, STARTUP_MENU_WIDTH, STARTUP_MENU_HEIGHT, true,
-				"Infinite"){
+				"infinite"){
 
 			@Override
 			public void clicked(GameContainer gc){
@@ -161,7 +160,7 @@ public class GUIProcessor implements Processor{
 		menuButtons.add(infinite);
 
 		Button survival = new TextButton(STARTUP_MENU_X, SURVIVAL_Y, STARTUP_MENU_WIDTH, STARTUP_MENU_HEIGHT, true,
-				"Survival"){
+				"survival"){
 
 			@Override
 			public void clicked(GameContainer gc){
@@ -223,21 +222,10 @@ public class GUIProcessor implements Processor{
 	public void update(GameContainer gc, int delta) throws SlickException{
 		// TODO Auto-generated method stub
 		Input input = gc.getInput();
-		boolean mouseClicked = false;
-		if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)){
-			if(!mouseWasDown){
-				mouseClicked = true;
-			}
-			mouseWasDown = true;
-
-		}
-		else{
-			mouseWasDown = false;
-		}
-
 		for(Button button : buttons){
-			if(mouseClicked && clickingButton(button, input) && button.isEnabled()){
+			if(cp.clicked() && clickingButton(button, input) && button.isEnabled()){
 				button.clicked(gc);
+				break;
 			}
 		}
 		if(backgroundOn){

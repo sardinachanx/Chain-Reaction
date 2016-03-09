@@ -167,13 +167,17 @@ public class GameProcessor implements Processor{
 				resetLevel();
 				restart(gc);
 			}
-			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !crossesMenu(input)){
+			if(cp.isDebug()){
+				if(cp.clicked() && !crossesMenu(input)){
+					started = true;
+				}
+			}
+			else{
 				started = true;
 			}
 		}
 		if(finished){
-			if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !crossesMenu(input)
-					|| input.isKeyPressed(Input.KEY_SPACE)){
+			if(cp.clicked() && !crossesMenu(input) || input.isKeyPressed(Input.KEY_SPACE)){
 				restart(gc);
 			}
 			return;
@@ -212,8 +216,7 @@ public class GameProcessor implements Processor{
 				}
 			}
 		}
-		if(input.isMousePressed(Input.MOUSE_LEFT_BUTTON) && !expandBall.isExpanding() && !expandBall.isExpanded()
-				&& !crossesMenu(input)){
+		if(cp.clicked() && !expandBall.isExpanding() && !expandBall.isExpanded() && !crossesMenu(input)){
 			expandBall.startExpanding();
 		}
 		balls.removeAll(removed);
