@@ -2,7 +2,7 @@ package highscore;
 
 import java.io.Serializable;
 
-public class HighScore implements Serializable, Comparable<HighScore>{
+public class HighScore implements Serializable{
 
 	private static final long serialVersionUID = 200042479976968312L;
 
@@ -17,27 +17,7 @@ public class HighScore implements Serializable, Comparable<HighScore>{
 	}
 
 	protected HighScore(){
-	}
 
-	@Override
-	public int compareTo(HighScore o){
-		if(lives < o.lives){
-			return -1;
-		}
-		else if(lives > o.lives){
-			return 1;
-		}
-		else{
-			if(score > o.score){
-				return -1;
-			}
-			else if(score < o.score){
-				return 1;
-			}
-			else{
-				return Integer.compare(hashCode(), o.hashCode());
-			}
-		}
 	}
 
 	public String getName(){

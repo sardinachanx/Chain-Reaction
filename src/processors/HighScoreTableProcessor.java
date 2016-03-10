@@ -20,6 +20,7 @@ public class HighScoreTableProcessor implements Processor{
 	private static final String RANKING = "rank";
 	private static final String NAME = "name";
 	private static final String LIVES = "lives";
+	private static final String LEVEL = "level";
 	private static final String SCORE = "score";
 	private static final String HELP = "press esc to return";
 
@@ -61,10 +62,10 @@ public class HighScoreTableProcessor implements Processor{
 		original = HighScoreTable.read(CoreProcessor.ORIGINAL_HIGH_SCORE_LOCATION);
 		survival = HighScoreTable.read(CoreProcessor.SURVIVAL_HIGH_SCORE_LOCATION);
 		if(original == null){
-			original = new HighScoreTable();
+			original = new HighScoreTable(false);
 		}
 		if(survival == null){
-			survival = new HighScoreTable();
+			survival = new HighScoreTable(true);
 		}
 		currentTable = original;
 		initialized = true;
@@ -80,8 +81,14 @@ public class HighScoreTableProcessor implements Processor{
 		g.drawString(RANKING, GraphicsEditor.getCenterX(RANKING, RANKING_X, g),
 				GraphicsEditor.getCenterY(RANKING, STARTING_Y, g));
 		g.drawString(NAME, GraphicsEditor.getCenterX(NAME, NAME_X, g), GraphicsEditor.getCenterY(NAME, STARTING_Y, g));
-		g.drawString(LIVES, GraphicsEditor.getCenterX(LIVES, LIVES_X, g),
-				GraphicsEditor.getCenterY(LIVES, STARTING_Y, g));
+		if(currentTable.equals(original)){
+			g.drawString(LIVES, GraphicsEditor.getCenterX(LIVES, LIVES_X, g),
+					GraphicsEditor.getCenterY(LIVES, STARTING_Y, g));
+		}
+		else{
+			g.drawString(LEVEL, GraphicsEditor.getCenterX(LEVEL, LIVES_X, g),
+					GraphicsEditor.getCenterY(LEVEL, STARTING_Y, g));
+		}
 		g.drawString(SCORE, GraphicsEditor.getCenterX(SCORE, SCORE_X, g),
 				GraphicsEditor.getCenterY(SCORE, STARTING_Y, g));
 		int tempY = HEADER_Y;
@@ -112,8 +119,10 @@ public class HighScoreTableProcessor implements Processor{
 		switch(gameMode){
 			case ORIGINAL:
 				currentTable = original;
+				break;
 			case SURVIVAL:
 				currentTable = survival;
+				break;
 			default:
 				return;
 		}

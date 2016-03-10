@@ -16,8 +16,18 @@ public class HighScoreTable implements Serializable{
 
 	private NavigableSet<HighScore> highScores;
 
-	public HighScoreTable(){
-		highScores = new TreeSet<HighScore>();
+	@SuppressWarnings("unused")
+	private HighScoreTable(){
+
+	}
+
+	public HighScoreTable(boolean survival){
+		if(survival){
+			highScores = new TreeSet<HighScore>(new HighScoreComparator(true));
+		}
+		else{
+			highScores = new TreeSet<HighScore>(new HighScoreComparator(false));
+		}
 	}
 
 	public void addHighScore(HighScore highScore){

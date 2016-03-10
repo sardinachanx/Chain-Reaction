@@ -215,7 +215,7 @@ public class GUIProcessor implements Processor{
 			@Override
 			public void clicked(GameContainer gc){
 				setHSButtonState(1);
-
+				cp.getHsp().setCurrentHighScoreTable(GameMode.SURVIVAL);
 			}
 
 		};

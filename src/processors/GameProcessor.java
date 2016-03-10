@@ -62,8 +62,8 @@ public class GameProcessor implements Processor{
 	protected CoreProcessor cp;
 
 	public GameProcessor(CoreProcessor cp, boolean debug){
-		this.cp = cp;
 		initialized = false;
+		this.cp = cp;
 		this.debug = debug;
 	}
 
