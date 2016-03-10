@@ -177,7 +177,7 @@ public class GameProcessor implements Processor{
 			}
 		}
 		if(finished){
-			if(cp.clicked() && !crossesMenu(input) || input.isKeyPressed(Input.KEY_SPACE)){
+			if(cp.clicked() && !crossesMenu(input) || input.isKeyDown(Input.KEY_SPACE)){
 				restart(gc);
 			}
 			return;
@@ -258,7 +258,9 @@ public class GameProcessor implements Processor{
 				level = newLevelFromGameMode(GameMode.SURVIVAL).getNextLevel();
 				cp.getCurrentAudio().setPaused(true);
 				cp.getCurrentAudio().setRestart(true);
-				cp.getCurrentAudio().setPaused(false);
+				if(cp.isAudioOn()){
+					cp.getCurrentAudio().setPaused(false);
+				}
 			}
 		}
 		for(int i = 0; i < level.getBallNum(); i++){

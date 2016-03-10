@@ -11,27 +11,31 @@ import org.newdawn.slick.SlickException;
 import highscore.HighScore;
 import highscore.HighScoreTable;
 import main.GameEngine;
+import main.GameMode;
 import main.GraphicsEditor;
 
 public class HighScoreTableProcessor implements Processor{
 
-	protected static final String HIGHSCORE = "high scores";
-	protected static final String RANKING = "rank";
-	protected static final String NAME = "name";
-	protected static final String LIVES = "lives";
-	protected static final String SCORE = "score";
-	protected static final String HELP = "press esc to return";
+	private static final String HIGHSCORE = "high scores";
+	private static final String RANKING = "rank";
+	private static final String NAME = "name";
+	private static final String LIVES = "lives";
+	private static final String SCORE = "score";
+	private static final String HELP = "press esc to return";
 
-	protected static final int HEADER_Y = 100;
-	protected static final int RANKING_X = 340;
-	protected static final int NAME_X = 440;
-	protected static final int LIVES_X = 540;
-	protected static final int SCORE_X = 600;
-	protected static final int STARTING_Y = 160;
-	protected static final int OFFSET = 35;
-	protected static final int HELP_Y = 600;
+	private static final int HEADER_Y = 60;
+	private static final int RANKING_X = 320;
+	private static final int NAME_X = 420;
+	private static final int LIVES_X = 530;
+	private static final int SCORE_X = 620;
+	private static final int STARTING_Y = 180;
+	private static final int OFFSET = 35;
+	private static final int HELP_Y = 600;
+	private static final int LINE_OFFSET = 10;
 
-	protected HighScoreTable highScoreTable;
+	protected HighScoreTable original;
+	protected HighScoreTable survival;
+	protected HighScoreTable currentTable;
 	protected boolean initialized;
 	protected CoreProcessor cp;
 
@@ -54,16 +58,23 @@ public class HighScoreTableProcessor implements Processor{
 	public void init(GameContainer gc) throws SlickException{
 		File folder = new File(CoreProcessor.HIGH_SCORE_FOLDER);
 		folder.mkdirs();
-		highScoreTable = HighScoreTable.read(CoreProcessor.HIGH_SCORE_LOCATION);
-		if(highScoreTable == null){
-			highScoreTable = new HighScoreTable();
+		original = HighScoreTable.read(CoreProcessor.ORIGINAL_HIGH_SCORE_LOCATION);
+		survival = HighScoreTable.read(CoreProcessor.SURVIVAL_HIGH_SCORE_LOCATION);
+		if(original == null){
+			original = new HighScoreTable();
 		}
+		if(survival == null){
+			survival = new HighScoreTable();
+		}
+		currentTable = original;
 		initialized = true;
 	}
 
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException{
 		g.setColor(Color.white);
+		g.drawLine(GameEngine.WIDTH / 2, GUIProcessor.SWITCH_Y - LINE_OFFSET, GameEngine.WIDTH / 2,
+				GUIProcessor.SWITCH_Y + LINE_OFFSET);
 		g.drawString(HIGHSCORE, GraphicsEditor.getCenterX(HIGHSCORE, GameEngine.WIDTH / 2, g),
 				GraphicsEditor.getCenterY(HIGHSCORE, HEADER_Y, g));
 		g.drawString(RANKING, GraphicsEditor.getCenterX(RANKING, RANKING_X, g),
@@ -75,7 +86,7 @@ public class HighScoreTableProcessor implements Processor{
 				GraphicsEditor.getCenterY(SCORE, STARTING_Y, g));
 		int tempY = HEADER_Y;
 		int index = 1;
-		for(HighScore highScore : highScoreTable.getHighScores()){
+		for(HighScore highScore : currentTable.getHighScores()){
 			tempY = HEADER_Y + OFFSET;
 			drawRow(highScore, g, index, tempY);
 		}
@@ -88,12 +99,24 @@ public class HighScoreTableProcessor implements Processor{
 		Input input = gc.getInput();
 		if(input.isKeyPressed(Input.KEY_ESCAPE)){
 			cp.setHighScoreTableProcessorState(false);
+			cp.getGup().setHSButton(false);
 			cp.getGup().setMenuButton(true);
 		}
 	}
 
-	public HighScoreTable getHighScoreTable(){
-		return highScoreTable;
+	public HighScoreTable getCurrentHighScoreTable(){
+		return currentTable;
+	}
+
+	public void setCurrentHighScoreTable(GameMode gameMode){
+		switch(gameMode){
+			case ORIGINAL:
+				currentTable = original;
+			case SURVIVAL:
+				currentTable = survival;
+			default:
+				return;
+		}
 	}
 
 	private void drawRow(HighScore highScore, Graphics g, int index, int y){

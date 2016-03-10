@@ -25,7 +25,8 @@ public class CoreProcessor extends BasicGame{
 	public static final int INFINITE_AUDIO = 2;
 	public static final int SURVIVAL_AUDIO = 3;
 	public static final String HIGH_SCORE_FOLDER = "data";
-	public static final String HIGH_SCORE_LOCATION = HIGH_SCORE_FOLDER + File.separator + "highscore.dat";
+	public static final String ORIGINAL_HIGH_SCORE_LOCATION = HIGH_SCORE_FOLDER + File.separator + "original.dat";
+	public static final String SURVIVAL_HIGH_SCORE_LOCATION = HIGH_SCORE_FOLDER + File.separator + "survival.dat";
 
 	protected GameProcessor gp;
 	protected GUIProcessor guip;
@@ -135,7 +136,6 @@ public class CoreProcessor extends BasicGame{
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException{
 		//TODO
-		//gp.render(gc, g);
 		if(font != null){
 			g.setFont(font);
 		}
@@ -147,7 +147,6 @@ public class CoreProcessor extends BasicGame{
 	@Override
 	public void init(GameContainer gc) throws SlickException{
 		// TODO Auto-generated method stub
-		//gp.init(gc);
 		running.add(ssp);
 	}
 

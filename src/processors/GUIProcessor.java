@@ -23,28 +23,33 @@ import objects.GameBall;
 
 public class GUIProcessor implements Processor{
 
-	public static final int SOUND_X = GameEngine.WIDTH - 25;
-	public static final int MENU_ICON_OFFSET = 40;
-	public static final int QUIT_X = SOUND_X - MENU_ICON_OFFSET;
-	public static final int PAUSE_X = QUIT_X - MENU_ICON_OFFSET;
-	public static final int MENU_ICON_Y = 25;
-	public static final int STARTUP_MENU_X = GameEngine.WIDTH / 2;
-	public static final int STARTUP_OFFSET = 100;
-	public static final int ORIGINAL_Y = GameEngine.HEIGHT / 2 - 10;
-	public static final int INFINITE_Y = ORIGINAL_Y + STARTUP_OFFSET;
-	public static final int SURVIVAL_Y = INFINITE_Y + STARTUP_OFFSET;
-	public static final int TITLE_Y = GameEngine.HEIGHT / 4 + 10;
-
 	public static final int GAMEMENU_X = GameEngine.WIDTH - 110;
 	public static final int GAMEMENU_Y = 45;
-	public static final int STARTUP_MENU_WIDTH = 300;
-	public static final int STARTUP_MENU_HEIGHT = 80;
+	public static final int SWITCH_Y = 130;
+
+	private static final int SOUND_X = GameEngine.WIDTH - 25;
+	private static final int MENU_ICON_OFFSET = 40;
+	private static final int QUIT_X = SOUND_X - MENU_ICON_OFFSET;
+	private static final int PAUSE_X = QUIT_X - MENU_ICON_OFFSET;
+	private static final int MENU_ICON_Y = 25;
+	private static final int STARTUP_MENU_X = GameEngine.WIDTH / 2;
+	private static final int STARTUP_OFFSET = 100;
+	private static final int ORIGINAL_Y = GameEngine.HEIGHT / 2 - 10;
+	private static final int INFINITE_Y = ORIGINAL_Y + STARTUP_OFFSET;
+	private static final int SURVIVAL_Y = INFINITE_Y + STARTUP_OFFSET;
+	private static final int TITLE_Y = GameEngine.HEIGHT / 4 + 10;
+	private static final int ORIGINAL_HS_X = GameEngine.WIDTH / 2 - 62;
+	private static final int SURVIVAL_HS_X = GameEngine.WIDTH / 2 + 62;
+
+	private static final int STARTUP_MENU_WIDTH = 300;
+	private static final int STARTUP_MENU_HEIGHT = 80;
 
 	private static final int BACKGROUND_BALLS = 20;
 
 	protected Set<Button> buttons;
 	protected Set<Button> menuButtons;
 	protected Set<Button> gameButtons;
+	protected Set<Button> highScoreButtons;
 	protected CoreProcessor cp;
 	protected boolean initialized;
 
@@ -62,7 +67,9 @@ public class GUIProcessor implements Processor{
 		buttons = new HashSet<Button>();
 		menuButtons = new HashSet<Button>();
 		gameButtons = new HashSet<Button>();
+		highScoreButtons = new HashSet<Button>();
 		backgroundBalls = new HashSet<Ball>();
+
 		Button pause = new GraphicButton(PAUSE_X, MENU_ICON_Y,
 				new Image("assets" + File.separator + "PauseButton.png")){
 
@@ -103,6 +110,7 @@ public class GUIProcessor implements Processor{
 			@Override
 			public void clicked(GameContainer gc){
 				cp.setHighScoreTableProcessorState(true);
+				setHSButton(true);
 				setMenuButton(false);
 			}
 
@@ -185,9 +193,39 @@ public class GUIProcessor implements Processor{
 		buttons.add(title);
 		menuButtons.add(title);
 
-		for(Button button : getGameButtons()){
-			button.setEnabled(false);
-		}
+		Button originalHS = new DualGraphicButton(ORIGINAL_HS_X, SWITCH_Y,
+				new Image("assets" + File.separator + "original1.png"),
+				new Image("assets" + File.separator + "original2.png")){
+
+			@Override
+			public void clicked(GameContainer gc){
+				setHSButtonState(0);
+				cp.getHsp().setCurrentHighScoreTable(GameMode.ORIGINAL);
+			}
+
+		};
+
+		buttons.add(originalHS);
+		highScoreButtons.add(originalHS);
+
+		Button survivalHS = new DualGraphicButton(SURVIVAL_HS_X, SWITCH_Y,
+				new Image("assets" + File.separator + "survival1.png"),
+				new Image("assets" + File.separator + "survival2.png")){
+
+			@Override
+			public void clicked(GameContainer gc){
+				setHSButtonState(1);
+
+			}
+
+		};
+
+		buttons.add(survivalHS);
+		highScoreButtons.add(survivalHS);
+
+		setGameButton(false);
+		setHSButton(false);
+
 		Random random = new Random();
 		for(int i = 0; i < BACKGROUND_BALLS; i++){
 			GameBall ball = new GameBall(GameProcessor.INITIAL_BALL_RADIUS,
@@ -291,6 +329,20 @@ public class GUIProcessor implements Processor{
 	public void setGameButton(boolean on){
 		for(Button button : gameButtons){
 			button.setEnabled(on);
+		}
+	}
+
+	public void setHSButton(boolean on){
+		for(Button button : highScoreButtons){
+			button.setEnabled(on);
+		}
+	}
+
+	public void setHSButtonState(int index){
+		for(Button button : highScoreButtons){
+			if(button instanceof DualGraphicButton){
+				((DualGraphicButton) button).setCurrentImage(index % 2);
+			}
 		}
 	}
 
