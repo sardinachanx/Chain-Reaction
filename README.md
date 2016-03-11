@@ -1,5 +1,5 @@
 # Chain Reaction
-Random offline Chain Reaction game written in Java, inspired by [Yvo Schaap](http://yvoschaap.com/chainrxn/).  Currently under development.
+Random offline Chain Reaction game written in Java, inspired by [Yvo Schaap](http://yvoschaap.com/chainrxn/).  Currently under development. This project uses the Java [Slick2D](http://slick.ninjacave.com) library.
 
 ##Current Features
 - Three game modes: Original, Infinite, Survival
@@ -7,6 +7,7 @@ Random offline Chain Reaction game written in Java, inspired by [Yvo Schaap](htt
   - Infinite: Level threshold unknown, high difficulty, unlimited lives
   - Survival: Level threshold known, medium-low difficulty, 1 life only!
 - Therapeutic (maybe) music for each game mode
+- Local highscore saving for original and survival modes
 
 ~~Disclaimer: I am not responsible if you get a heart attack during Survival mode. Or any other mode. Or in your life. I'm just not responsible for heart attacks in general.~~
 
@@ -22,5 +23,4 @@ Click anywhere to land and expand the bomb. When a ball collides with a bomb or 
 
 
 ##Features in progress
-- Highscore records & table
 - Easter Eggs! 
