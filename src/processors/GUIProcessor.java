@@ -40,7 +40,6 @@ public class GUIProcessor implements Processor{
 	private static final int TITLE_Y = GameEngine.HEIGHT / 4 + 10;
 	private static final int ORIGINAL_HS_X = GameEngine.WIDTH / 2 - 62;
 	private static final int SURVIVAL_HS_X = GameEngine.WIDTH / 2 + 62;
-	private static final String ICON_LOCATION = "assets";
 
 	private static final int STARTUP_MENU_WIDTH = 300;
 	private static final int STARTUP_MENU_HEIGHT = 80;
@@ -72,7 +71,7 @@ public class GUIProcessor implements Processor{
 		backgroundBalls = new HashSet<Ball>();
 
 		Button pause = new GraphicButton(PAUSE_X, MENU_ICON_Y,
-				new Image(ICON_LOCATION + File.separator + "PauseButton.png")){
+				new Image("assets" + File.separator + "PauseButton.png")){
 
 			@Override
 			public void clicked(GameContainer gc){
@@ -89,8 +88,7 @@ public class GUIProcessor implements Processor{
 		buttons.add(pause);
 		gameButtons.add(pause);
 
-		Button quit = new GraphicButton(QUIT_X, MENU_ICON_Y,
-				new Image(ICON_LOCATION + File.separator + "QuitButton.png")){
+		Button quit = new GraphicButton(QUIT_X, MENU_ICON_Y, new Image("assets" + File.separator + "QuitButton.png")){
 
 			@Override
 			public void clicked(GameContainer gc){
@@ -108,7 +106,7 @@ public class GUIProcessor implements Processor{
 		gameButtons.add(quit);
 
 		Button highScore = new GraphicButton(QUIT_X, MENU_ICON_Y,
-				new Image(ICON_LOCATION + File.separator + "HighScore.png")){
+				new Image("assets" + File.separator + "HighScore.png")){
 
 			@Override
 			public void clicked(GameContainer gc){
@@ -123,9 +121,8 @@ public class GUIProcessor implements Processor{
 		buttons.add(highScore);
 		menuButtons.add(highScore);
 
-		Button sound = new DualGraphicButton(SOUND_X, MENU_ICON_Y,
-				new Image(ICON_LOCATION + File.separator + "SoundOn.png"),
-				new Image(ICON_LOCATION + File.separator + "SoundOff.png")){
+		Button sound = new DualGraphicButton(SOUND_X, MENU_ICON_Y, new Image("assets" + File.separator + "SoundOn.png"),
+				new Image("assets" + File.separator + "SoundOff.png")){
 
 			@Override
 			public void clicked(GameContainer gc){
@@ -186,8 +183,7 @@ public class GUIProcessor implements Processor{
 		buttons.add(survival);
 		menuButtons.add(survival);
 
-		Button title = new GraphicButton(STARTUP_MENU_X, TITLE_Y,
-				new Image(ICON_LOCATION + File.separator + "logo.png")){
+		Button title = new GraphicButton(STARTUP_MENU_X, TITLE_Y, new Image("assets" + File.separator + "logo.png")){
 
 			@Override
 			public void clicked(GameContainer gc){
@@ -200,8 +196,8 @@ public class GUIProcessor implements Processor{
 		menuButtons.add(title);
 
 		Button originalHS = new DualGraphicButton(ORIGINAL_HS_X, SWITCH_Y,
-				new Image(ICON_LOCATION + File.separator + "original1.png"),
-				new Image(ICON_LOCATION + File.separator + "original2.png")){
+				new Image("assets" + File.separator + "original1.png"),
+				new Image("assets" + File.separator + "original2.png")){
 
 			@Override
 			public void clicked(GameContainer gc){
@@ -215,8 +211,8 @@ public class GUIProcessor implements Processor{
 		highScoreButtons.add(originalHS);
 
 		Button survivalHS = new DualGraphicButton(SURVIVAL_HS_X, SWITCH_Y,
-				new Image(ICON_LOCATION + File.separator + "survival1.png"),
-				new Image(ICON_LOCATION + File.separator + "survival2.png")){
+				new Image("assets" + File.separator + "survival1.png"),
+				new Image("assets" + File.separator + "survival2.png")){
 
 			@Override
 			public void clicked(GameContainer gc){
