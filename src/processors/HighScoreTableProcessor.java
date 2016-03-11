@@ -23,6 +23,7 @@ public class HighScoreTableProcessor implements Processor{
 	private static final String LEVEL = "level";
 	private static final String SCORE = "score";
 	private static final String HELP = "press esc to return";
+	private static final String RESTART = "click anywhere or press space to restart game";
 
 	private static final int HEADER_Y = 60;
 	private static final int RANKING_X = 320;
@@ -39,6 +40,7 @@ public class HighScoreTableProcessor implements Processor{
 	protected HighScoreTable currentTable;
 	protected boolean initialized;
 	protected CoreProcessor cp;
+	protected boolean inGame;
 
 	public HighScoreTableProcessor(CoreProcessor cp){
 		this.cp = cp;
@@ -74,31 +76,47 @@ public class HighScoreTableProcessor implements Processor{
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException{
 		g.setColor(Color.white);
-		g.drawLine(GameEngine.WIDTH / 2, GUIProcessor.SWITCH_Y - LINE_OFFSET, GameEngine.WIDTH / 2,
-				GUIProcessor.SWITCH_Y + LINE_OFFSET);
+		if(!inGame){
+			g.drawLine(GameEngine.WIDTH / 2, GUIProcessor.SWITCH_Y - LINE_OFFSET, GameEngine.WIDTH / 2,
+					GUIProcessor.SWITCH_Y + LINE_OFFSET);
+		}
 		g.drawString(HIGHSCORE, GraphicsEditor.getCenterX(HIGHSCORE, GameEngine.WIDTH / 2, g),
 				GraphicsEditor.getCenterY(HIGHSCORE, HEADER_Y, g));
+		int rowHeight;
+		if(inGame){
+			rowHeight = HEADER_Y + OFFSET * 2;
+		}
+		else{
+			rowHeight = STARTING_Y;
+		}
 		g.drawString(RANKING, GraphicsEditor.getCenterX(RANKING, RANKING_X, g),
-				GraphicsEditor.getCenterY(RANKING, STARTING_Y, g));
-		g.drawString(NAME, GraphicsEditor.getCenterX(NAME, NAME_X, g), GraphicsEditor.getCenterY(NAME, STARTING_Y, g));
+				GraphicsEditor.getCenterY(RANKING, rowHeight, g));
+		g.drawString(NAME, GraphicsEditor.getCenterX(NAME, NAME_X, g), GraphicsEditor.getCenterY(NAME, rowHeight, g));
 		if(currentTable.equals(original)){
 			g.drawString(LIVES, GraphicsEditor.getCenterX(LIVES, LIVES_X, g),
-					GraphicsEditor.getCenterY(LIVES, STARTING_Y, g));
+					GraphicsEditor.getCenterY(LIVES, rowHeight, g));
 		}
 		else{
 			g.drawString(LEVEL, GraphicsEditor.getCenterX(LEVEL, LIVES_X, g),
-					GraphicsEditor.getCenterY(LEVEL, STARTING_Y, g));
+					GraphicsEditor.getCenterY(LEVEL, rowHeight, g));
 		}
 		g.drawString(SCORE, GraphicsEditor.getCenterX(SCORE, SCORE_X, g),
-				GraphicsEditor.getCenterY(SCORE, STARTING_Y, g));
-		int tempY = HEADER_Y;
+				GraphicsEditor.getCenterY(SCORE, rowHeight, g));
+		int tempY = rowHeight;
 		int index = 1;
 		for(HighScore highScore : currentTable.getHighScores()){
-			tempY = HEADER_Y + OFFSET;
+			tempY += OFFSET;
 			drawRow(highScore, g, index, tempY);
+			index++;
 		}
-		g.drawString(HELP, GraphicsEditor.getCenterX(HELP, GameEngine.WIDTH / 2, g),
-				GraphicsEditor.getCenterY(HELP, HELP_Y, g));
+		if(inGame){
+			g.drawString(RESTART, GraphicsEditor.getCenterX(RESTART, GameEngine.WIDTH / 2, g),
+					GraphicsEditor.getCenterY(RESTART, HELP_Y, g));
+		}
+		else{
+			g.drawString(HELP, GraphicsEditor.getCenterX(HELP, GameEngine.WIDTH / 2, g),
+					GraphicsEditor.getCenterY(HELP, HELP_Y, g));
+		}
 	}
 
 	@Override
@@ -109,6 +127,14 @@ public class HighScoreTableProcessor implements Processor{
 			cp.getGup().setHSButton(false);
 			cp.getGup().setMenuButton(true);
 		}
+	}
+
+	public HighScoreTable getOriginal(){
+		return original;
+	}
+
+	public HighScoreTable getSurvival(){
+		return survival;
 	}
 
 	public HighScoreTable getCurrentHighScoreTable(){
@@ -137,6 +163,19 @@ public class HighScoreTableProcessor implements Processor{
 		g.drawString(name, GraphicsEditor.getCenterX(name, NAME_X, g), GraphicsEditor.getCenterY(name, y, g));
 		g.drawString(lives, GraphicsEditor.getCenterX(lives, LIVES_X, g), GraphicsEditor.getCenterY(lives, y, g));
 		g.drawString(score, GraphicsEditor.getCenterX(score, SCORE_X, g), GraphicsEditor.getCenterY(score, y, g));
+	}
+
+	public void save(){
+		original.write(CoreProcessor.ORIGINAL_HIGH_SCORE_LOCATION);
+		survival.write(CoreProcessor.SURVIVAL_HIGH_SCORE_LOCATION);
+	}
+
+	public void setInGame(boolean inGame){
+		this.inGame = inGame;
+	}
+
+	public boolean inGame(){
+		return inGame;
 	}
 
 }

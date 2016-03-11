@@ -28,7 +28,7 @@ public class HighScoreComparator implements Comparator<HighScore>, Serializable{
 				return 1;
 			}
 			else{
-				return Integer.compare(o1.hashCode(), o2.hashCode());
+				return Long.compare(o1.getCreationTime(), o2.getCreationTime());
 			}
 		}
 		else{

@@ -5,6 +5,8 @@ import java.util.Random;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 
+import main.GameEngine;
+
 public class GameBall extends Ball{
 
 	private static final float SPEED_CONSTANT = 1.5f;
@@ -15,11 +17,11 @@ public class GameBall extends Ball{
 	protected float speedY;
 	protected boolean colorChanged;
 
-	public GameBall(int initialRadius, Color color, GameContainer gc){
+	public GameBall(int initialRadius, Color color){
 		super(initialRadius, color);
 		Random rand = new Random();
-		x = rand.nextInt(gc.getWidth() - radius * 2) + radius;
-		y = rand.nextInt(gc.getHeight() - radius * 2) + radius;
+		x = rand.nextInt(GameEngine.WIDTH - radius * 2) + radius;
+		y = rand.nextInt(GameEngine.HEIGHT - radius * 2) + radius;
 		speedX = generateSpeed();
 		speedY = generateSpeed();
 		color = new Color(rand.nextInt(256), rand.nextInt(256), rand.nextInt(256)).brighter();
@@ -63,11 +65,11 @@ public class GameBall extends Ball{
 	@Override
 	public void move(GameContainer gc){
 		x += speedX;
-		if(x > gc.getWidth() - radius || x < radius){
+		if(x > GameEngine.WIDTH - radius || x < radius){
 			speedX *= -1;
 		}
 		y += speedY;
-		if(y > gc.getHeight() - radius || y < radius){
+		if(y > GameEngine.HEIGHT - radius || y < radius){
 			speedY *= -1;
 		}
 	}

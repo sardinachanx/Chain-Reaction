@@ -13,6 +13,7 @@ import java.util.TreeSet;
 public class HighScoreTable implements Serializable{
 
 	private static final long serialVersionUID = -6706569067121394792L;
+	public static final int SIZE_THRESHOLD = 10;
 
 	private NavigableSet<HighScore> highScores;
 
@@ -32,11 +33,17 @@ public class HighScoreTable implements Serializable{
 
 	public void addHighScore(HighScore highScore){
 		highScores.add(highScore);
-		highScores.remove(highScores.last());
+		if(highScores.size() > SIZE_THRESHOLD){
+			highScores.remove(highScores.last());
+		}
 	}
 
 	public NavigableSet<HighScore> getHighScores(){
 		return highScores;
+	}
+
+	public void write(String name){
+		HighScoreTable.write(this, name);
 	}
 
 	public static void write(HighScoreTable hst, String name){

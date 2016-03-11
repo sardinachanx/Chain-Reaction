@@ -6,14 +6,16 @@ public class HighScore implements Serializable{
 
 	private static final long serialVersionUID = 200042479976968312L;
 
+	private long creationTime;
 	protected String name;
-	protected int score;
+	protected long score;
 	protected int lives;
 
-	public HighScore(String name, int score, int lives){
+	public HighScore(String name, long score, int lives){
 		this.name = name;
 		this.score = score;
 		this.lives = lives;
+		creationTime = System.currentTimeMillis();
 	}
 
 	protected HighScore(){
@@ -24,12 +26,16 @@ public class HighScore implements Serializable{
 		return name;
 	}
 
-	public int getScore(){
+	public long getScore(){
 		return score;
 	}
 
 	public int getLives(){
 		return lives;
+	}
+
+	public long getCreationTime(){
+		return creationTime;
 	}
 
 	@Override

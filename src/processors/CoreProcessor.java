@@ -298,4 +298,9 @@ public class CoreProcessor extends BasicGame{
 		return mouseClicked;
 	}
 
+	@Override
+	public void keyReleased(int code, char c){
+		gp.receiveInput(code, c);
+	}
+
 }

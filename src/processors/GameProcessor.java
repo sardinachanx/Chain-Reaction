@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+import highscore.HighScore;
 import levels.InfiniteLevel;
 import levels.Level;
 import levels.OriginalLevel;
@@ -39,7 +40,7 @@ public class GameProcessor implements Processor{
 
 	private static final String LEVEL_PASSED = "click anywhere or press space for the next level";
 	private static final String LEVEL_FAILED = "click anywhere or press space to replay level";
-	private static final String GAME_RESTART = "click anywhere or press space to restart game";
+	private static final String NAME_INPUT = "enter your name and press enter: ";
 	private static final int END_OFFSET = 45;
 
 	protected Set<Ball> balls;
@@ -49,15 +50,20 @@ public class GameProcessor implements Processor{
 	protected long currentLevelScore;
 	protected int ballsExpanded;
 	protected Random random;
+	protected int lives;
 
 	protected GameMode gameMode;
 	protected Level level;
+
+	protected String name;
 
 	protected boolean started;
 	protected boolean finished;
 	protected boolean paused;
 	protected boolean initialized;
 	protected boolean debug;
+	protected boolean needsInput;
+	protected boolean inputDone;
 
 	protected CoreProcessor cp;
 
@@ -99,17 +105,21 @@ public class GameProcessor implements Processor{
 				SCORE_X, BALL_Y);
 		g.drawString("mode: " + gameMode.getName().toLowerCase() + " level " + level.getLevelNumber(), SCORE_X, MODE_Y);
 		if(finished){
-			String s = ballsExpanded + " out of " + level.getBallNum() + " expanded";
-			g.drawString(s, GraphicsEditor.getCenterX(s, GameEngine.WIDTH / 2, g),
-					GraphicsEditor.getCenterY(s, GameEngine.HEIGHT / 2, g));
+			boolean drawExpanded = true;
 			if(ballsExpanded >= level.getLevelThreshold()){
 				if(level.getLevelNumber() != 12){
 					g.drawString(LEVEL_PASSED, GraphicsEditor.getCenterX(LEVEL_PASSED, GameEngine.WIDTH / 2, g),
 							GraphicsEditor.getCenterY(LEVEL_PASSED, GameEngine.HEIGHT / 2, g) + END_OFFSET);
 				}
 				else{
-					g.drawString(GAME_RESTART, GraphicsEditor.getCenterX(GAME_RESTART, GameEngine.WIDTH / 2, g),
-							GraphicsEditor.getCenterY(GAME_RESTART, GameEngine.HEIGHT / 2, g) + END_OFFSET);
+					if(needsInput){
+						String inputString = NAME_INPUT + name;
+						g.drawString(inputString, GraphicsEditor.getCenterX(inputString, GameEngine.WIDTH / 2, g),
+								GraphicsEditor.getCenterY(inputString, GameEngine.HEIGHT / 2, g) + END_OFFSET);
+					}
+					else{
+						drawExpanded = false;
+					}
 				}
 			}
 			else{
@@ -118,15 +128,27 @@ public class GameProcessor implements Processor{
 							GraphicsEditor.getCenterY(LEVEL_FAILED, GameEngine.HEIGHT / 2, g) + END_OFFSET);
 				}
 				else{
-					g.drawString(GAME_RESTART, GraphicsEditor.getCenterX(GAME_RESTART, GameEngine.WIDTH / 2, g),
-							GraphicsEditor.getCenterY(GAME_RESTART, GameEngine.HEIGHT / 2, g) + END_OFFSET);
+					if(needsInput){
+						String inputString = NAME_INPUT + name;
+						g.drawString(inputString, GraphicsEditor.getCenterX(inputString, GameEngine.WIDTH / 2, g),
+								GraphicsEditor.getCenterY(inputString, GameEngine.HEIGHT / 2, g) + END_OFFSET);
+					}
+					else{
+						drawExpanded = false;
+					}
 				}
+			}
+			if(drawExpanded){
+				String s = ballsExpanded + " out of " + level.getBallNum() + " expanded";
+				g.drawString(s, GraphicsEditor.getCenterX(s, GameEngine.WIDTH / 2, g),
+						GraphicsEditor.getCenterY(s, GameEngine.HEIGHT / 2, g));
 			}
 		}
 	}
 
 	@Override
 	public void init(GameContainer gc) throws SlickException{
+		name = "";
 		balls = new HashSet<Ball>();
 		removed = new HashSet<Ball>();
 		random = new Random();
@@ -135,7 +157,7 @@ public class GameProcessor implements Processor{
 		score = 0;
 		paused = false;
 		gameMode = GameMode.ORIGINAL;
-		restart(gc);
+		restart();
 		initialized = true;
 	}
 
@@ -152,21 +174,6 @@ public class GameProcessor implements Processor{
 			return;
 		}
 		if(!started){
-			if(input.isKeyPressed(Input.KEY_A) && isDebug()){
-				gameMode = GameMode.ORIGINAL;
-				resetLevel();
-				restart(gc);
-			}
-			if(input.isKeyPressed(Input.KEY_S) && isDebug()){
-				gameMode = GameMode.SURVIVAL;
-				resetLevel();
-				restart(gc);
-			}
-			if(input.isKeyPressed(Input.KEY_D) && isDebug()){
-				gameMode = GameMode.INFINITE;
-				resetLevel();
-				restart(gc);
-			}
 			if(cp.isDebug()){
 				if(cp.clicked() && !crossesMenu(input)){
 					started = true;
@@ -178,7 +185,8 @@ public class GameProcessor implements Processor{
 		}
 		if(finished){
 			if(cp.clicked() && !crossesMenu(input) || input.isKeyDown(Input.KEY_SPACE)){
-				restart(gc);
+				cp.setHighScoreTableProcessorState(false);
+				restart();
 			}
 			return;
 		}
@@ -242,30 +250,37 @@ public class GameProcessor implements Processor{
 		this.paused = paused;
 	}
 
-	public void restart(GameContainer gc) throws SlickException{
+	public void restart(){
 		balls.clear();
 		if(ballsExpanded >= level.getLevelThreshold()){
-			level = level.getNextLevel();
-			if(level.getLevelNumber() > 1){
-				score += currentLevelScore;
+			if(level.getLevelNumber() == 12 && gameMode == GameMode.ORIGINAL && !inputDone){
+				needsInput = true;
+				return;
 			}
 			else{
-				score = 0;
+				inputDone = false;
+				level = level.getNextLevel();
+				if(level.getLevelNumber() > 1){
+					score += currentLevelScore;
+				}
+				else{
+					score = 0;
+				}
 			}
 		}
 		else{
-			if(gameMode == GameMode.SURVIVAL){
-				level = newLevelFromGameMode(GameMode.SURVIVAL).getNextLevel();
-				cp.getCurrentAudio().setPaused(true);
-				cp.getCurrentAudio().setRestart(true);
-				if(cp.isAudioOn()){
-					cp.getCurrentAudio().setPaused(false);
-				}
+			lives++;
+			if(gameMode == GameMode.SURVIVAL && !inputDone){
+				needsInput = true;
+				return;
+			}
+			else{
+				inputDone = false;
 			}
 		}
 		for(int i = 0; i < level.getBallNum(); i++){
 			GameBall ball = new GameBall(INITIAL_BALL_RADIUS,
-					new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)).brighter(), gc);
+					new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)).brighter());
 			balls.add(ball);
 		}
 		expandBall = new ExpandBall(INITIAL_EXPANDBALL_RADIUS, new Color(255, 255, 255, 96));
@@ -288,6 +303,16 @@ public class GameProcessor implements Processor{
 				throw new IllegalArgumentException("Game Mode unsupported.");
 
 		}
+	}
+
+	private void loseSurvival(){
+		resetLevel();
+		cp.getCurrentAudio().setPaused(true);
+		cp.getCurrentAudio().setRestart(true);
+		if(cp.isAudioOn()){
+			cp.getCurrentAudio().setPaused(false);
+		}
+		restart();
 	}
 
 	@Override
@@ -313,9 +338,10 @@ public class GameProcessor implements Processor{
 	}
 
 	public void resetLevel(){
-		ballsExpanded = level.getLevelThreshold();
 		level = newLevelFromGameMode(gameMode);
+		ballsExpanded = level.getLevelThreshold();
 		score = 0;
+		lives = 0;
 	}
 
 	public void setStarted(boolean started){
@@ -325,4 +351,49 @@ public class GameProcessor implements Processor{
 	public boolean isStarted(){
 		return started;
 	}
+
+	public boolean needsInput(){
+		return needsInput;
+	}
+
+	public void receiveInput(int code, char c){
+		if(!needsInput()){
+			return;
+		}
+		if(code == Input.KEY_BACK || code == Input.KEY_DELETE){
+			if(name.length() > 0){
+				name = name.substring(0, name.length() - 1);
+			}
+		}
+		else if(code == Input.KEY_ESCAPE){
+			needsInput = false;
+			inputDone = true;
+			name = "";
+		}
+		else if(code == Input.KEY_ENTER){
+			needsInput = false;
+			score += currentLevelScore;
+			currentLevelScore = 0;
+			if(name.startsWith(" ")){
+				name = name.substring(1);
+			}
+			if(gameMode == GameMode.ORIGINAL){
+				cp.getHsp().getOriginal().addHighScore(new HighScore(name, score, lives));
+				cp.getHsp().save();
+			}
+			else if(gameMode == GameMode.SURVIVAL){
+				cp.getHsp().getSurvival().addHighScore(new HighScore(name, score, level.getLevelNumber()));
+				cp.getHsp().save();
+				loseSurvival();
+			}
+			cp.getHsp().setInGame(true);
+			cp.setHighScoreTableProcessorState(true);
+			inputDone = true;
+			name = "";
+		}
+		else{
+			name += c;
+		}
+	}
+
 }

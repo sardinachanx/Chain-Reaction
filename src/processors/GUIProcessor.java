@@ -92,6 +92,7 @@ public class GUIProcessor implements Processor{
 
 			@Override
 			public void clicked(GameContainer gc){
+				cp.setHighScoreTableProcessorState(false);
 				cp.setGameProcessorState(false);
 				cp.getGp().setStarted(false);
 				setGameButton(false);
@@ -109,6 +110,7 @@ public class GUIProcessor implements Processor{
 
 			@Override
 			public void clicked(GameContainer gc){
+				cp.getHsp().setInGame(false);
 				cp.setHighScoreTableProcessorState(true);
 				setHSButton(true);
 				setMenuButton(false);
@@ -229,7 +231,7 @@ public class GUIProcessor implements Processor{
 		Random random = new Random();
 		for(int i = 0; i < BACKGROUND_BALLS; i++){
 			GameBall ball = new GameBall(GameProcessor.INITIAL_BALL_RADIUS,
-					new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)).darker(), gc);
+					new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)).darker());
 			backgroundBalls.add(ball);
 		}
 		backgroundOn = true;
@@ -311,12 +313,7 @@ public class GUIProcessor implements Processor{
 		setMenuButton(false);
 		setGameButton(true);
 		cp.getGp().resetLevel();
-		try{
-			cp.getGp().restart(gc);
-		}
-		catch(SlickException e){
-			e.printStackTrace();
-		}
+		cp.getGp().restart();
 		cp.getRunning().add(cp.getGp());
 	}
 
