@@ -174,19 +174,17 @@ public class GameProcessor implements Processor{
 			return;
 		}
 		if(!started){
-			if(cp.isDebug()){
-				if(cp.clicked() && !crossesMenu(input)){
-					started = true;
-				}
-			}
-			else{
-				started = true;
-			}
+			started = true;
 		}
 		if(finished){
 			if(cp.clicked() && !crossesMenu(input) || input.isKeyDown(Input.KEY_SPACE)){
 				cp.setHighScoreTableProcessorState(false);
-				restart();
+				if(gameMode == GameMode.SURVIVAL && inputDone){
+					loseSurvival();
+				}
+				else{
+					restart();
+				}
 			}
 			return;
 		}
@@ -305,7 +303,7 @@ public class GameProcessor implements Processor{
 		}
 	}
 
-	private void loseSurvival(){
+	public void loseSurvival(){
 		resetLevel();
 		cp.getCurrentAudio().setPaused(true);
 		cp.getCurrentAudio().setRestart(true);
@@ -378,15 +376,16 @@ public class GameProcessor implements Processor{
 				name = name.substring(1);
 			}
 			if(gameMode == GameMode.ORIGINAL){
-				cp.getHsp().getOriginal().addHighScore(new HighScore(name, score, lives));
-				cp.getHsp().save();
+				cp.getHighScoreTableProcessor().getOriginal().addHighScore(new HighScore(name, score, lives));
+				cp.getHighScoreTableProcessor().save();
+				cp.getHighScoreTableProcessor().setCurrentHighScoreTable(GameMode.ORIGINAL);
 			}
 			else if(gameMode == GameMode.SURVIVAL){
-				cp.getHsp().getSurvival().addHighScore(new HighScore(name, score, level.getLevelNumber()));
-				cp.getHsp().save();
-				loseSurvival();
+				cp.getHighScoreTableProcessor().getSurvival().addHighScore(new HighScore(name, score, level.getLevelNumber()));
+				cp.getHighScoreTableProcessor().save();
+				cp.getHighScoreTableProcessor().setCurrentHighScoreTable(GameMode.SURVIVAL);
 			}
-			cp.getHsp().setInGame(true);
+			cp.getHighScoreTableProcessor().setInGame(true);
 			cp.setHighScoreTableProcessorState(true);
 			inputDone = true;
 			name = "";

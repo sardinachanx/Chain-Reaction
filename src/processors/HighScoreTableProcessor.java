@@ -124,8 +124,13 @@ public class HighScoreTableProcessor implements Processor{
 		Input input = gc.getInput();
 		if(input.isKeyPressed(Input.KEY_ESCAPE)){
 			cp.setHighScoreTableProcessorState(false);
-			cp.getGup().setHSButton(false);
-			cp.getGup().setMenuButton(true);
+			cp.getGUIProcessor().setHSButton(false);
+			cp.getGUIProcessor().setMenuButton(true);
+			if(inGame){
+				if(cp.getGameProcessor().getGameMode() == GameMode.SURVIVAL){
+					cp.getGameProcessor().loseSurvival();
+				}
+			}
 		}
 	}
 

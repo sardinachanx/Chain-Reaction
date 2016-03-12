@@ -76,11 +76,11 @@ public class GUIProcessor implements Processor{
 
 			@Override
 			public void clicked(GameContainer gc){
-				if(!cp.getGp().isPaused()){
-					cp.getGp().setPaused(true);
+				if(!cp.getGameProcessor().isPaused()){
+					cp.getGameProcessor().setPaused(true);
 				}
 				else{
-					cp.getGp().setPaused(false);
+					cp.getGameProcessor().setPaused(false);
 				}
 				cp.playPauseCurrentAudio();
 			}
@@ -96,7 +96,7 @@ public class GUIProcessor implements Processor{
 			public void clicked(GameContainer gc){
 				cp.setHighScoreTableProcessorState(false);
 				cp.setGameProcessorState(false);
-				cp.getGp().setStarted(false);
+				cp.getGameProcessor().setStarted(false);
 				setGameButton(false);
 				backgroundOn = true;
 				cp.setCurrentAudio(cp.getAudioFiles().get(CoreProcessor.MENU_AUDIO), true);
@@ -112,7 +112,7 @@ public class GUIProcessor implements Processor{
 
 			@Override
 			public void clicked(GameContainer gc){
-				cp.getHsp().setInGame(false);
+				cp.getHighScoreTableProcessor().setInGame(false);
 				cp.setHighScoreTableProcessorState(true);
 				setHSButton(true);
 				setMenuButton(false);
@@ -149,7 +149,7 @@ public class GUIProcessor implements Processor{
 
 			@Override
 			public void clicked(GameContainer gc){
-				cp.getGp().setGameMode(GameMode.ORIGINAL);
+				cp.getGameProcessor().setGameMode(GameMode.ORIGINAL);
 				cp.setCurrentAudio(cp.getCurrentAudioList(GameMode.ORIGINAL), true);
 				startGame(gc);
 			}
@@ -163,7 +163,7 @@ public class GUIProcessor implements Processor{
 
 			@Override
 			public void clicked(GameContainer gc){
-				cp.getGp().setGameMode(GameMode.INFINITE);
+				cp.getGameProcessor().setGameMode(GameMode.INFINITE);
 				cp.setCurrentAudio(cp.getCurrentAudioList(GameMode.INFINITE), true);
 				startGame(gc);
 			}
@@ -177,7 +177,7 @@ public class GUIProcessor implements Processor{
 
 			@Override
 			public void clicked(GameContainer gc){
-				cp.getGp().setGameMode(GameMode.SURVIVAL);
+				cp.getGameProcessor().setGameMode(GameMode.SURVIVAL);
 				cp.setCurrentAudio(cp.getCurrentAudioList(GameMode.SURVIVAL), true);
 				startGame(gc);
 			}
@@ -206,7 +206,7 @@ public class GUIProcessor implements Processor{
 			@Override
 			public void clicked(GameContainer gc){
 				setHSButtonState(0);
-				cp.getHsp().setCurrentHighScoreTable(GameMode.ORIGINAL);
+				cp.getHighScoreTableProcessor().setCurrentHighScoreTable(GameMode.ORIGINAL);
 			}
 
 		};
@@ -221,7 +221,7 @@ public class GUIProcessor implements Processor{
 			@Override
 			public void clicked(GameContainer gc){
 				setHSButtonState(1);
-				cp.getHsp().setCurrentHighScoreTable(GameMode.SURVIVAL);
+				cp.getHighScoreTableProcessor().setCurrentHighScoreTable(GameMode.SURVIVAL);
 			}
 
 		};
@@ -316,9 +316,9 @@ public class GUIProcessor implements Processor{
 		backgroundOn = false;
 		setMenuButton(false);
 		setGameButton(true);
-		cp.getGp().resetLevel();
-		cp.getGp().restart();
-		cp.getRunning().add(cp.getGp());
+		cp.getGameProcessor().resetLevel();
+		cp.getGameProcessor().restart();
+		cp.getRunning().add(cp.getGameProcessor());
 	}
 
 	public void setMenuButton(boolean on){
