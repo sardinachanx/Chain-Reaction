@@ -11,12 +11,26 @@ import org.newdawn.slick.TrueTypeFont;
 import main.GameEngine;
 import main.GraphicsEditor;
 
+/**
+ * The StartupScreenProcessor runs the initialization method of all processors controlled by the associated
+ * instance of CoreProcessor upon startup. It displays the loading screen and handles font loading when the
+ * game is launched.
+ * @author tchan17
+ *
+ */
 public class StartupScreenProcessor implements Processor{
 
+	//The CoreProcessor associated with this instance of the StartupScreenProcessor.
 	CoreProcessor cp;
+	//Whether the game has finished its starting up process.
 	boolean startUp;
+	//Whether the initialization method of this processor (font changing) is finished.
 	boolean initialized;
 
+	/**
+	 * Constructs a new StartupScreenProcessor with an associated CoreProcessor.
+	 * @param cp the CoreProcessor associated with this instance of StartupScreenProcessor
+	 */
 	public StartupScreenProcessor(CoreProcessor cp){
 		this.cp = cp;
 		startUp = false;
@@ -62,6 +76,10 @@ public class StartupScreenProcessor implements Processor{
 		return initialized;
 	}
 
+	/**
+	 * Returns whether the whole game has finished initializing.
+	 * @return whether the game is fully initialized
+	 */
 	public boolean hasStartUp(){
 		return startUp;
 	}
