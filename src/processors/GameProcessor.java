@@ -22,51 +22,96 @@ import objects.Ball;
 import objects.ExpandBall;
 import objects.GameBall;
 
+/**
+ * The GameProcessor. Controls the game movements (the actual game).
+ * @author tchan17
+ *
+ */
 public class GameProcessor implements Processor{
 
-	protected static final int INITIAL_BALL_RADIUS = 8;
-	protected static final int INITIAL_EXPANDBALL_RADIUS = 50;
-	protected static final int EXPANDED_BALL_RADIUS = 50;
-	protected static final int MAX_TIMER = 3000;
-	protected static final int EXPAND_SPEED = 3;
-	protected static final int SHRINK_SPEED = 4;
+	//The radius of the balls unexpanded.
+	public static final int INITIAL_BALL_RADIUS = 8;
+	//The radius of the balls expanded.
+	public static final int INITIAL_EXPANDBALL_RADIUS = 50;
+	//The radius of the ball to be controlled by the player.
+	public static final int EXPANDED_BALL_RADIUS = 50;
+	//The time after which the expanded balls will disappear.
+	public static final int MAX_TIMER = 3000;
+	//The expanding speed of the ball.
+	public static final int EXPAND_SPEED = 3;
+	//The shrinking speed of the ball.
+	public static final int SHRINK_SPEED = 4;
 
+	//X-Coordinate of the score.
 	private static final int SCORE_X = 10;
+	//Y-Coordinate of the score.
 	private static final int SCORE_Y = 10;
+	//The line width of the display.
 	private static final int OFFSET = 25;
+	//Y-Coordinate of the fraction display.
 	private static final int BALL_Y = SCORE_Y + OFFSET;
+	//Y-Coordinate of the mode display.
 	private static final int MODE_Y = BALL_Y + OFFSET;
+	//The multiplier of the score.
 	private static final int SCORE_FACTOR = 100;
 
+	//The message displayed if the level is passed.
 	private static final String LEVEL_PASSED = "click anywhere or press space for the next level";
+	//The message displayed if the level is not passed.
 	private static final String LEVEL_FAILED = "click anywhere or press space to replay level";
+	//The message displayed to prompt a high score entry input.
 	private static final String NAME_INPUT = "enter your name and press enter: ";
+	//The offset of the final display of high score table.
 	private static final int END_OFFSET = 45;
 
+	//The set of balls in the game.
 	protected Set<Ball> balls;
+	//The set of balls to be removed at the end of each frame.
 	protected Set<Ball> removed;
+	//The ball to be controlled by the user.
 	protected ExpandBall expandBall;
+	//The cumulative score of the current game.
 	protected long score;
+	//The score of the current level.
 	protected long currentLevelScore;
+	//The number of balls expanded.
 	protected int ballsExpanded;
+	//The random needed to generate random numbers.
 	protected Random random;
+	//The amount of lives used.
 	protected int lives;
 
+	//Current GameMode.
 	protected GameMode gameMode;
+	//Current level.
 	protected Level level;
 
+	//The name for high score entries.
 	protected String name;
 
+	//Whether a level has started.
 	protected boolean started;
+	//Whether a level has finished.
 	protected boolean finished;
+	//Whether a level was paused.
 	protected boolean paused;
+	//Whether the GameProcessor has been initialized.
 	protected boolean initialized;
+	//Whether debug mode is on.
 	protected boolean debug;
+	//Whether the score needs input.
 	protected boolean needsInput;
+	//Whether the input is done.
 	protected boolean inputDone;
 
+	//The CoreProcessor associated with this instance of GameProcessor.
 	protected CoreProcessor cp;
 
+	/**
+	 * Creates an uninitialized GameProcessor.
+	 * @param cp the CoreProcessor associated with this GameProcessor
+	 * @param debug whether debug mode is on
+	 */
 	public GameProcessor(CoreProcessor cp, boolean debug){
 		initialized = false;
 		this.cp = cp;
@@ -232,22 +277,41 @@ public class GameProcessor implements Processor{
 		}
 	}
 
+	/**
+	 * Gets the current game mode of the function.
+	 * @return current game mode
+	 */
 	public GameMode getGameMode(){
 		return gameMode;
 	}
 
+	/**
+	 * Sets the current game mode. Used by GUI.
+	 * @param gameMode the GameMode to be displayed/set to.
+	 */
 	public void setGameMode(GameMode gameMode){
 		this.gameMode = gameMode;
 	}
 
+	/**
+	 * A method to check whether the game is paused.
+	 * @return whether the game is paused.
+	 */
 	public boolean isPaused(){
 		return paused;
 	}
 
+	/**
+	 * Sets the game to play/pause.
+	 * @param paused whether the game is playing (true) or paused (false)
+	 */
 	public void setPaused(boolean paused){
 		this.paused = paused;
 	}
 
+	/**
+	 * A method to restart the game.
+	 */
 	public void restart(){
 		balls.clear();
 		if(ballsExpanded >= level.getLevelThreshold()){
@@ -289,6 +353,11 @@ public class GameProcessor implements Processor{
 		ballsExpanded = 0;
 	}
 
+	/**
+	 * Initializes level 1 of the GameMode passed in.
+	 * @param gameMode the GameMode from which the level is created.
+	 * @return the new Level created.
+	 */
 	private static Level newLevelFromGameMode(GameMode gameMode){
 		switch(gameMode){
 			case SURVIVAL:
@@ -303,6 +372,9 @@ public class GameProcessor implements Processor{
 		}
 	}
 
+	/**
+	 * Method to control the audio when the player loses in Survival.
+	 */
 	public void loseSurvival(){
 		resetLevel();
 		cp.getCurrentAudio().setPaused(true);
@@ -323,18 +395,34 @@ public class GameProcessor implements Processor{
 		return 1;
 	}
 
+	/**
+	 * Checks if the click falls under the GUI menu.
+	 * @param input the Input of the game.
+	 * @return whether the mouse location is inside the GUI menu.
+	 */
 	private boolean crossesMenu(Input input){
 		return input.getMouseX() > GUIProcessor.GAMEMENU_X && input.getMouseY() < GUIProcessor.GAMEMENU_Y;
 	}
 
+	/**
+	 * Checks if game is in debug mode.
+	 * @return whether game is in debug mode.
+	 */
 	public boolean isDebug(){
 		return debug;
 	}
 
+	/**
+	 * Sets GameProcessor to debug/not debug.
+	 * @param debug boolean to set whether debug is or not
+	 */
 	public void setDebug(boolean debug){
 		this.debug = debug;
 	}
 
+	/**
+	 * Resets the level to level 1.
+	 */
 	public void resetLevel(){
 		level = newLevelFromGameMode(gameMode);
 		ballsExpanded = level.getLevelThreshold();
@@ -342,18 +430,35 @@ public class GameProcessor implements Processor{
 		lives = 0;
 	}
 
+	/**
+	 * Sets level started to true or false.
+	 * @param started whether the level has started or not.
+	 */
 	public void setStarted(boolean started){
 		this.started = started;
 	}
 
+	/**
+	 * Checks if the current level has started or not.
+	 * @return whether the level has started or not
+	 */
 	public boolean isStarted(){
 		return started;
 	}
 
+	/**
+	 * Checks whether the current level needs input.
+	 * @return whether the level needs input
+	 */
 	public boolean needsInput(){
 		return needsInput;
 	}
 
+	/**
+	 * Checks and processes the input when needed.
+	 * @param code the integer code of the key
+	 * @param c the corresponding character
+	 */
 	public void receiveInput(int code, char c){
 		if(!needsInput()){
 			return;
@@ -381,7 +486,8 @@ public class GameProcessor implements Processor{
 				cp.getHighScoreTableProcessor().setCurrentHighScoreTable(GameMode.ORIGINAL);
 			}
 			else if(gameMode == GameMode.SURVIVAL){
-				cp.getHighScoreTableProcessor().getSurvival().addHighScore(new HighScore(name, score, level.getLevelNumber()));
+				cp.getHighScoreTableProcessor().getSurvival()
+						.addHighScore(new HighScore(name, score, level.getLevelNumber()));
 				cp.getHighScoreTableProcessor().save();
 				cp.getHighScoreTableProcessor().setCurrentHighScoreTable(GameMode.SURVIVAL);
 			}

@@ -12,8 +12,14 @@ import org.newdawn.slick.SlickException;
 
 import main.GameEngine;
 
+/**
+ * The help screen processor. Handles the help screen.
+ * @author tchan17
+ *
+ */
 public class HelpProcessor implements Processor{
 
+	//The images used for the help screen.
 	protected List<Image> instructions;
 	protected Image currentImage;
 	protected int currentImageIndex;
@@ -21,6 +27,10 @@ public class HelpProcessor implements Processor{
 	protected boolean initialized;
 	protected CoreProcessor cp;
 
+	/**
+	 * Creates a new HelpProcessor.
+	 * @param cp the CoreProcessor associated with this HelpProcessor
+	 */
 	public HelpProcessor(CoreProcessor cp){
 		this.cp = cp;
 		initialized = false;

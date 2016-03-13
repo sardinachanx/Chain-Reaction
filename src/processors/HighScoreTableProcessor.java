@@ -14,8 +14,14 @@ import main.GameEngine;
 import main.GameMode;
 import main.GraphicsEditor;
 
+/**
+ * The HighScoreTableProcessor controls the high score table and the saving/reading of high scores
+ * @author tchan17
+ *
+ */
 public class HighScoreTableProcessor implements Processor{
 
+	//The Strings for the header of the table.
 	private static final String HIGHSCORE = "high scores";
 	private static final String RANKING = "rank";
 	private static final String NAME = "name";
@@ -25,6 +31,7 @@ public class HighScoreTableProcessor implements Processor{
 	private static final String HELP = "press esc to return";
 	private static final String RESTART = "click anywhere or press space to restart game";
 
+	//The locations of the labels.
 	private static final int HEADER_Y = 60;
 	private static final int RANKING_X = 320;
 	private static final int NAME_X = 420;
@@ -35,6 +42,7 @@ public class HighScoreTableProcessor implements Processor{
 	private static final int HELP_Y = 600;
 	private static final int LINE_OFFSET = 10;
 
+	//The HighScore tables of the original/survival and the current table.
 	protected HighScoreTable original;
 	protected HighScoreTable survival;
 	protected HighScoreTable currentTable;
@@ -42,6 +50,10 @@ public class HighScoreTableProcessor implements Processor{
 	protected CoreProcessor cp;
 	protected boolean inGame;
 
+	/**
+	 * Initializes a new HighScoreTableProcessor.
+	 * @param cp the CoreProcessor associated with this HighScoreTableProcessor
+	 */
 	public HighScoreTableProcessor(CoreProcessor cp){
 		this.cp = cp;
 		initialized = false;
@@ -134,18 +146,34 @@ public class HighScoreTableProcessor implements Processor{
 		}
 	}
 
+	/**
+	 * Gets the high score table of original mode.
+	 * @return the high score table of the original mode.
+	 */
 	public HighScoreTable getOriginal(){
 		return original;
 	}
 
+	/**
+	 * Gets the high score table of survival mode.
+	 * @return the high score table of the survival mode.
+	 */
 	public HighScoreTable getSurvival(){
 		return survival;
 	}
 
+	/**
+	 * Gets the current high score table.
+	 * @return the current high score table
+	 */
 	public HighScoreTable getCurrentHighScoreTable(){
 		return currentTable;
 	}
 
+	/**
+	 * Switches the high score table according to the GameMode passed in.
+	 * @param gameMode the game mode to switch to
+	 */
 	public void setCurrentHighScoreTable(GameMode gameMode){
 		switch(gameMode){
 			case ORIGINAL:
@@ -159,6 +187,13 @@ public class HighScoreTableProcessor implements Processor{
 		}
 	}
 
+	/**
+	 * Draws each row of the high score table.
+	 * @param highScore the HighScore entry to draw
+	 * @param g the Graphics of the game
+	 * @param index the ranking of the entry
+	 * @param y the y-coordinate of the row
+	 */
 	private void drawRow(HighScore highScore, Graphics g, int index, int y){
 		String rank = index + "";
 		String name = highScore.getName();
@@ -170,15 +205,26 @@ public class HighScoreTableProcessor implements Processor{
 		g.drawString(score, GraphicsEditor.getCenterX(score, SCORE_X, g), GraphicsEditor.getCenterY(score, y, g));
 	}
 
+	/**
+	 * Saves the high scores into a file.
+	 */
 	public void save(){
 		original.write(CoreProcessor.ORIGINAL_HIGH_SCORE_LOCATION);
 		survival.write(CoreProcessor.SURVIVAL_HIGH_SCORE_LOCATION);
 	}
 
+	/**
+	 * Sets whether the table is displayed in-game.
+	 * @param inGame whether the table is in-game or not
+	 */
 	public void setInGame(boolean inGame){
 		this.inGame = inGame;
 	}
 
+	/**
+	 * Returns whether the high score table is in-game.
+	 * @return whether the table is in-game
+	 */
 	public boolean inGame(){
 		return inGame;
 	}

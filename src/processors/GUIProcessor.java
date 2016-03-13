@@ -21,8 +21,15 @@ import menu.TextButton;
 import objects.Ball;
 import objects.GameBall;
 
+/**
+ * The GUIProcessor class controls the buttons and menus of the game, including the startup screen,
+ * pause/quit/sound buttons, high score button, and the logo/helper button.
+ * @author tchan17
+ *
+ */
 public class GUIProcessor implements Processor{
 
+	//The constants for the locations of buttons.
 	public static final int GAMEMENU_X = GameEngine.WIDTH - 110;
 	public static final int GAMEMENU_Y = 45;
 	public static final int SWITCH_Y = 130;
@@ -47,6 +54,7 @@ public class GUIProcessor implements Processor{
 
 	private static final int BACKGROUND_BALLS = 20;
 
+	//All the buttons.
 	protected Set<Button> buttons;
 	protected Set<Button> menuButtons;
 	protected Set<Button> gameButtons;
@@ -279,6 +287,10 @@ public class GUIProcessor implements Processor{
 		}
 	}
 
+	/**
+	 * Adds a button to the list.
+	 * @param button the button to be added.
+	 */
 	public void addButton(TextButton button){
 		buttons.add(button);
 	}
@@ -293,18 +305,36 @@ public class GUIProcessor implements Processor{
 		return 2;
 	}
 
+	/**
+	 * Gets the buttons processed by this processor.
+	 * @return the set of buttons
+	 */
 	public Set<Button> getButtons(){
 		return buttons;
 	}
 
+	/**
+	 * Gets the menu buttons processed by this processor.
+	 * @return the set of menu buttons
+	 */
 	public Set<Button> getMenuButtons(){
 		return menuButtons;
 	}
 
+	/**
+	 * Gets the game buttons processed by this processor.
+	 * @return the set of game buttons
+	 */
 	public Set<Button> getGameButtons(){
 		return gameButtons;
 	}
 
+	/**
+	 * Checks whether a button is being clicked.
+	 * @param button the button being checked
+	 * @param input the Input of the game
+	 * @return whether the mouse is on the button
+	 */
 	private boolean clickingButton(Button button, Input input){
 		int mouseX = input.getMouseX();
 		int mouseY = input.getMouseY();
@@ -312,6 +342,10 @@ public class GUIProcessor implements Processor{
 				&& mouseY > button.getY() - button.getHeight() / 2 && mouseY < button.getY() + button.getHeight() / 2;
 	}
 
+	/**
+	 * Starts the game.
+	 * @param gc the GameContainer of the game.
+	 */
 	private void startGame(GameContainer gc){
 		backgroundOn = false;
 		setMenuButton(false);
@@ -321,24 +355,40 @@ public class GUIProcessor implements Processor{
 		cp.getRunning().add(cp.getGameProcessor());
 	}
 
+	/**
+	 * Turns on/off menu buttons
+	 * @param on whether the buttons are on or off.
+	 */
 	public void setMenuButton(boolean on){
 		for(Button button : menuButtons){
 			button.setEnabled(on);
 		}
 	}
 
+	/**
+	 * Turns on/off game buttons
+	 * @param on whether the buttons are on or off.
+	 */
 	public void setGameButton(boolean on){
 		for(Button button : gameButtons){
 			button.setEnabled(on);
 		}
 	}
 
+	/**
+	 * Turns on/off high score buttons
+	 * @param on whether the buttons are on or off.
+	 */
 	public void setHSButton(boolean on){
 		for(Button button : highScoreButtons){
 			button.setEnabled(on);
 		}
 	}
 
+	/**
+	 * Sets the state of high score buttons
+	 * @param index 0 or 1
+	 */
 	public void setHSButtonState(int index){
 		for(Button button : highScoreButtons){
 			if(button instanceof DualGraphicButton){
