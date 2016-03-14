@@ -1,5 +1,10 @@
 package main;
 
+/**
+ * A set of GameMode constants.
+ * @author tchan17
+ *
+ */
 public enum GameMode{
 
 	ORIGINAL("Original"), INFINITE("Infinite"), SURVIVAL("Survival");
@@ -10,6 +15,10 @@ public enum GameMode{
 		this.name = name;
 	}
 
+	/**
+	 * Gets the name of the GameMode.
+	 * @return the name of the GameMode
+	 */
 	public String getName(){
 		return name;
 	}
