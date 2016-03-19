@@ -24,3 +24,12 @@ Click anywhere to land and expand the bomb. When a ball collides with a bomb or 
 
 ##Features in progress
 - Easter Eggs! 
+
+
+##Running the Game
+
+*As an App:*
+Just run the app. ~Don't kill me for not teaching you how to do that.~ 
+
+*In Eclipse:*
+Import the project into Eclipse. Right click on Properties, go to Build Path, find "lwjgl.jar" and choose the native library location to be the Slick folder. Run the GameEngine class. 
