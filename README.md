@@ -28,7 +28,7 @@ Click anywhere to land and expand the bomb. When a ball collides with a bomb or 
 
 ##Running the Game
 
-*As an App:*
+*As an app:*
 Just run the app. ~Don't kill me for not teaching you how to do that.~ 
 
 *In Eclipse:*
