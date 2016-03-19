@@ -13,7 +13,7 @@ Random offline Chain Reaction game written in Java, inspired by [Yvo Schaap](htt
 
 
 ##Game Instructions
-Click anywhere to land and expand the bomb. When a ball collides with a bomb or any ball that has hit the bomb, the ball also explodes, and disappears after a while. You pass the level if enough balls expand. The further the ball is from the bomb, the higher the score. 
+Click anywhere to land and expand the player-controlled ball (the initial ball). When a ball collides with the initial ball or any ball that has hit the initial ball, the ball also explodes, and disappears after a while. You pass the level if enough balls expand. The further the ball is from the initial ball, the higher the score. 
 
 *Original Only:* 
 *If you don't pass the level threshold, the amount of lives you use increases by 1 and you have to attempt the level again and pass it before you can move on ~~with life~~. Your final high score depends on how many lives you use, so be careful!*
@@ -29,7 +29,7 @@ Click anywhere to land and expand the bomb. When a ball collides with a bomb or 
 ##Running the Game
 
 *As an app:*
-Just run the app. ~Don't kill me for not teaching you how to do that.~ 
+Just run the app. ~~Don't kill me for not teaching you how to do that.~~ 
 
 *In Eclipse:*
 Import the project into Eclipse. Right click on Properties, go to Build Path, find "lwjgl.jar" and choose the native library location to be the Slick folder. Run the GameEngine class. 
