@@ -125,6 +125,7 @@ public class GUIProcessor implements Processor{
 				setHSButton(true);
 				setMenuButton(false);
 				setHSButtonState(0);
+				cp.getHighScoreTableProcessor().setCurrentHighScoreTable(GameMode.ORIGINAL);
 			}
 
 		};
