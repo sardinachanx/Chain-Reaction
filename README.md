@@ -3,7 +3,7 @@ Random offline Chain Reaction game written in Java, inspired by [Yvo Schaap](htt
 
 ##Current Features
 - Three game modes: Original, Infinite, Survival
-  - Original: Adopted from Yvo Schaap's [advanced version](http://yvoschaap.com/chainrxnadvanced/) with 12 levels, unlimited lives
+  - Original: Adapted from Yvo Schaap's [advanced version](http://yvoschaap.com/chainrxnadvanced/) with 12 levels, unlimited lives
   - Infinite: Level threshold unknown, high difficulty, unlimited lives
   - Survival: Level threshold known, medium-low difficulty, 1 life only!
 - Therapeutic (maybe) music for each game mode
@@ -29,7 +29,9 @@ Click anywhere to land and expand the player-controlled ball (the initial ball).
 ##Running the Game
 
 *As an app:*
-OSX: Download the zip in /dist and the /assets folder. Unpack the zip for the app, then go to "Show Package Contents" and copy the /assets folder into the /Contents/Resources folder. I'll find a better way to do this later.
+
+OSX: Download the zip in **/dist** and the **/assets** folder. Unpack the zip for the app, then **go to "Show Package Contents" and copy the /assets folder into the /Contents/Resources folder.** This is important, or else the game won't run. I'll find a better way to do this later.
 
 *In Eclipse:*
+
 Import the project into Eclipse. Right click on Properties, go to Build Path, find "lwjgl.jar" and choose the native library location to be the Slick folder. Run the GameEngine class. 
