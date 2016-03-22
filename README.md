@@ -29,7 +29,7 @@ Click anywhere to land and expand the player-controlled ball (the initial ball).
 ##Running the Game
 
 *As an app:*
-Just run the app. ~~Don't kill me for not teaching you how to do that.~~ 
+OSX: Download the zip in /dist and the /assets folder. Unpack the zip for the app, then go to "Show Package Contents" and copy the /assets folder into the /Contents/Resources folder. I'll find a better way to do this later.
 
 *In Eclipse:*
 Import the project into Eclipse. Right click on Properties, go to Build Path, find "lwjgl.jar" and choose the native library location to be the Slick folder. Run the GameEngine class. 
