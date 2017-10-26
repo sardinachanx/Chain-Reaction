@@ -1,7 +1,7 @@
 # Chain Reaction
 Random offline Chain Reaction game written in Java, inspired by [Yvo Schaap](http://yvoschaap.com/chainrxn/).  Currently under development. This project uses the Java [Slick2D](http://slick.ninjacave.com) library.
 
-##Current Features
+## Current Features
 - Three game modes: Original, Infinite, Survival
   - Original: Adapted from Yvo Schaap's [advanced version](http://yvoschaap.com/chainrxnadvanced/) with 12 levels, unlimited lives
   - Infinite: Level threshold unknown, high difficulty, unlimited lives
@@ -12,7 +12,7 @@ Random offline Chain Reaction game written in Java, inspired by [Yvo Schaap](htt
 ~~Disclaimer: I am not responsible if you get a heart attack during Survival mode. Or any other mode. Or in your life. I'm just not responsible for heart attacks in general.~~
 
 
-##Game Instructions
+## Game Instructions
 Click anywhere to land and expand the player-controlled ball (the initial ball). When a ball collides with the initial ball or any ball that has hit the initial ball, the ball also explodes, and disappears after a while. You pass the level if enough balls expand. The further the ball is from the initial ball, the higher the score. 
 
 *Original Only:* 
@@ -22,11 +22,11 @@ Click anywhere to land and expand the player-controlled ball (the initial ball).
 *If you die, you go back to Level 1 (and your current score gets entered into the high score table if you go far enough).*
 
 
-##Features in progress
+## Features in progress
 - Easter Eggs! 
 
 
-##Running the Game
+## Running the Game
 
 *As an app:*
 
